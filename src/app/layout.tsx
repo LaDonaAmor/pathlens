@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "PathLens · Visual Query Builder",
+  title: "PathLens - Visual Query Builder",
   description: "Build complex queries through a clearer lens.",
 }
 
