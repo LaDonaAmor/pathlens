@@ -20,18 +20,23 @@ export function QueryBuilder() {
   const addHistory = useHistoryStore((state) => state.addHistory)
   const savePreset = usePresetsStore((state) => state.savePreset)
 
+  const isValid = builder.validationIssues.length === 0
+
   function runQuery() {
+    if (!isValid) return
+
     setRunning(true)
     window.setTimeout(() => setRunning(false), 350)
   }
 
   function saveCurrentQuery() {
-    savePreset(builder.tree, builder.schemaId)
+    savePreset(builder.sanitizedTree, builder.schemaId)
   }
 
   useKeyboardShortcuts({
     onRun: () => {
-      addHistory(builder.tree, builder.schemaId)
+      if (!isValid) return
+      addHistory(builder.sanitizedTree, builder.schemaId)
       runQuery()
     },
     onReset: builder.reset,
@@ -51,7 +56,7 @@ export function QueryBuilder() {
           </div>
 
           <Toolbar
-            tree={builder.tree}
+            tree={builder.sanitizedTree}
             schemaId={builder.schemaId}
             onRun={runQuery}
             onReset={builder.reset}
@@ -67,17 +72,32 @@ export function QueryBuilder() {
 
           <section className="space-y-5">
             <div className="rounded-lg border border-slate-200 bg-white p-4">
-              <div className="mb-4">
-                <h2 className="text-lg font-semibold">Query Rules</h2>
-                <p className="text-sm text-slate-600">
-                  Add rules, nest groups, collapse sections, and drag items to
-                  reorder them.
-                </p>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h2 className="text-lg font-semibold">Query Rules</h2>
+                  <p className="text-sm text-slate-600">
+                    Add rules, nest groups, collapse sections, and drag items to
+                    reorder them.
+                  </p>
+                </div>
+
+                <span
+                  className={
+                    isValid
+                      ? "text-sm font-medium text-emerald-700"
+                      : "text-sm font-medium text-red-600"
+                  }
+                >
+                  {isValid
+                    ? "Valid query"
+                    : `${builder.validationIssues.length} issue(s)`}
+                </span>
               </div>
 
               <RuleGroup
                 group={builder.tree}
                 fields={builder.schema.fields}
+                issues={builder.validationIssues}
                 isRoot
                 onAddRule={builder.addRule}
                 onAddGroup={builder.addGroup}
@@ -106,7 +126,10 @@ export function QueryBuilder() {
                 {running ? (
                   <LoadingState />
                 ) : (
-                  <ResultsPanel data={builder.dataset} tree={builder.tree} />
+                  <ResultsPanel
+                    data={builder.dataset}
+                    tree={builder.sanitizedTree}
+                  />
                 )}
               </div>
             </div>
