@@ -194,18 +194,19 @@ export const useQueryStore = create<QueryStoreState>((set, get) => ({
 
   setRuleOperator: (ruleId, operator) =>
     set((state) => ({
-      tree: updateNode(state.tree, ruleId, (node) =>
-        node.type === "rule"
-          ? {
-              ...node,
-              operator,
-              value:
-                operator === "isNull" || operator === "isNotNull"
-                  ? null
-                  : node.value,
-            }
-          : node
-      ) as QueryTree,
+      tree: updateNode(state.tree, ruleId, (node) => {
+        if (node.type !== "rule") return node
+
+        if (
+          operator === "isNull" ||
+          operator === "isNotNull" ||
+          operator === "between"
+        ) {
+          return { ...node, operator, value: null }
+        }
+
+        return { ...node, operator, value: null } // ← was getDefaultValue(field.type)
+      }) as QueryTree,
     })),
 
   setGroupLogic: (groupId, logic) =>
