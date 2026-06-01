@@ -37,8 +37,8 @@ export function QueryPreview({
               onClick={() => setMode(item)}
               className={
                 mode === item
-                  ? "border-(--app-accent) bg-(--app-accent) text-white hover:bg-(--app-accent-hover)"
-                  : ""
+                  ? "border-2 border-(--app-border-muted) bg-(--syntax-bg) p-5 font-(--font-mono) text-sm leading-5 text-(--syntax-text) hover:bg-(--syntax-bg) focus:bg-(--syntax-bg) focus:outline-none focus-visible:outline-none"
+                  : "focus:outline-none focus-visible:outline-none"
               }
             >
               {item.toUpperCase()}
