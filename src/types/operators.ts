@@ -14,6 +14,8 @@ export type Operator =
   | "regex"
   | "before"
   | "after"
+  | "inArray"
+  | "notInArray"
 
 export type OperatorDefinition = {
   id: Operator
@@ -61,7 +63,7 @@ export const OPERATORS: OperatorDefinition[] = [
   },
   {
     id: "in",
-    label: "In array",
+    label: "In list",
     supportedTypes: ["string", "number", "enum"],
     requiresValue: true,
   },
@@ -74,13 +76,13 @@ export const OPERATORS: OperatorDefinition[] = [
   {
     id: "isNull",
     label: "Is null",
-    supportedTypes: ["string", "number", "boolean", "date", "enum"],
+    supportedTypes: ["string", "number", "boolean", "date", "enum", "array"],
     requiresValue: false,
   },
   {
     id: "isNotNull",
     label: "Is not null",
-    supportedTypes: ["string", "number", "boolean", "date", "enum"],
+    supportedTypes: ["string", "number", "boolean", "date", "enum", "array"],
     requiresValue: false,
   },
   {
@@ -99,6 +101,18 @@ export const OPERATORS: OperatorDefinition[] = [
     id: "after",
     label: "After",
     supportedTypes: ["date"],
+    requiresValue: true,
+  },
+  {
+    id: "inArray",
+    label: "In array",
+    supportedTypes: ["array"],
+    requiresValue: true,
+  },
+  {
+    id: "notInArray",
+    label: "Not in array",
+    supportedTypes: ["array"],
     requiresValue: true,
   },
 ]
