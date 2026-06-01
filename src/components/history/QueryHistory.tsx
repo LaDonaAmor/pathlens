@@ -11,8 +11,7 @@ export function QueryHistory() {
 
   return (
     <section className="space-y-2">
-      <h2 className="text-lg font-semibold text-slate-950">History</h2>
-
+      <h2 className="text-lg font-semibold text-(--app-text)">History</h2>
       {items.length ? (
         items.map((item) => (
           <HistoryItem
@@ -25,7 +24,7 @@ export function QueryHistory() {
           />
         ))
       ) : (
-        <p className="text-sm text-slate-500">No query runs yet.</p>
+        <p className="text-sm text-(--syntax-text)">No query runs yet.</p>
       )}
     </section>
   )

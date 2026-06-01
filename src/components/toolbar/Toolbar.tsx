@@ -38,7 +38,7 @@ export function Toolbar({
     <div className="flex flex-wrap items-center gap-2">
       <Button
         onClick={handleRun}
-        className="bg-slate-950 text-white hover:bg-slate-800"
+        className="border-(--app-accent) bg-(--app-accent) text-white hover:bg-(--app-accent-hover)"
       >
         <Play size={16} />
         Run

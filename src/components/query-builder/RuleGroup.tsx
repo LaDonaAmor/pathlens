@@ -56,7 +56,7 @@ export function RuleGroup({
 
   return (
     <section
-      className={`rounded-lg border border-slate-300 bg-slate-50 p-3 ${
+      className={`rounded-lg border border-(--app-border) bg-(--app-surface-muted) p-3 ${
         depth ? "ml-4" : ""
       }`}
     >
@@ -77,7 +77,7 @@ export function RuleGroup({
         {!isRoot ? (
           <Button
             onClick={() => onRemove(group.id)}
-            className="ml-auto h-9 w-9 px-0 text-red-600"
+            className="ml-auto h-9 w-9 px-0 text-(--error)"
             aria-label="Remove group"
           >
             <Trash2 size={16} />
@@ -86,7 +86,7 @@ export function RuleGroup({
       </div>
 
       {groupIssue ? (
-        <p className="mb-3 text-xs font-medium text-red-600">{groupIssue}</p>
+        <p className="mb-3 text-xs font-medium text-(--error)">{groupIssue}</p>
       ) : null}
 
       {!group.collapsed ? (

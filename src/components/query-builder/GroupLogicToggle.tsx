@@ -10,7 +10,7 @@ export function GroupLogicToggle({
   onChange: (value: LogicOperator) => void
 }) {
   return (
-    <div className="inline-grid grid-cols-2 rounded-md border border-slate-300 bg-slate-100 p-1">
+    <div className="inline-grid grid-cols-2 rounded-md border border-(--app-border) bg-(--app-surface-muted) p-1">
       {(["AND", "OR"] as LogicOperator[]).map((logic) => (
         <button
           key={logic}
@@ -18,8 +18,10 @@ export function GroupLogicToggle({
           onClick={() => onChange(logic)}
           className={
             value === logic
-              ? "rounded bg-slate-950 px-3 py-1 text-xs font-bold text-white"
-              : "rounded px-3 py-1 text-xs font-bold text-slate-600 hover:bg-white"
+              ? logic === "AND"
+                ? "rounded bg-(--logic-and-bg) cursor-pointer px-3 py-1 text-xs font-bold text-(--logic-and-text)"
+                : "rounded bg-(--logic-or-bg) cursor-pointer px-3 py-1 text-xs font-bold text-(--logic-or-text)"
+              : "rounded px-3 py-1 text-xs cursor-pointer font-bold text-(--app-text-muted) hover:bg-(--app-surface)"
           }
         >
           {logic}

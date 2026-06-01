@@ -19,7 +19,7 @@ export function ImportButton({
   }
 
   return (
-    <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 transition hover:bg-slate-100">
+    <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-(--app-border) bg-(--app-surface) px-3 text-sm font-medium text-(--app-text) transition hover:bg-(--app-surface-muted)">
       <Upload size={16} />
       Import
       <input

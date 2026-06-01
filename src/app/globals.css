@@ -1,16 +1,67 @@
 @import "tailwindcss";
 
-:root,
-[data-theme="dark"]:root {
-  --color-background: #f1f5f9;
-  --color-foreground: #0f172a;
+:root {
+  --color-background: #f4f4f4;
+  --color-foreground: #2e2e2e;
+
+  --app-bg: #f4f4f4;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f8fafc;
+  --app-text: #2e2e2e;
+  --app-text-muted: #64748b;
+  --app-border: #d8dee8;
+  --app-accent: #4a90e2;
+  --app-accent-hover: #357abd;
+
+  --logic-and-bg: #264653;
+  --logic-and-text: #ffffff;
+  --logic-or-bg: #e9c46a;
+  --logic-or-text: #2e2e2e;
+
+  --syntax-bg: #0f172a;
+  --syntax-text: #f4f4f4;
+  --syntax-keyword: #0055da;
+  --syntax-string: #e63946;
+  --syntax-param: #2a9d8f;
+  --syntax-comment: #64748b;
+
+  --error: #ff0052;
+  --success: #059669;
+  --success-bg: #ecfdf5;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 [data-theme="dark"]:root {
   --color-background: #0f172a;
-  --color-foreground: #e2e8f0;
+  --color-foreground: #f4f4f4;
+
+  --app-bg: #0f172a;
+  --app-surface: #1e293b;
+  --app-surface-muted: #172033;
+  --app-text: #f4f4f4;
+  --app-text-muted: #94a3b8;
+  --app-border: #334155;
+  --app-accent: #22d3ee;
+  --app-accent-hover: #67e8f9;
+
+  --logic-and-bg: #2a9d8f;
+  --logic-and-text: #061814;
+  --logic-or-bg: #e9c46a;
+  --logic-or-text: #2e2e2e;
+
+  --syntax-bg: #020617;
+  --syntax-text: #f4f4f4;
+  --syntax-keyword: #22d3ee;
+  --syntax-string: #fb7185;
+  --syntax-param: #2dd4bf;
+  --syntax-comment: #64748b;
+
+  --error: #ff0052;
+  --success: #34d399;
+  --success-bg: #064e3b;
+
   color-scheme: dark;
 }
 
@@ -51,9 +102,6 @@ input:focus-visible {
 [data-theme="dark"] .bg-slate-100 {
   background-color: #0f172a;
 }
-[data-theme="dark"] .bg-slate-950 {
-  background-color: #020617;
-}
 [data-theme="dark"] .text-slate-950,
 [data-theme="dark"] .text-slate-900,
 [data-theme="dark"] .text-slate-800 {
@@ -80,11 +128,9 @@ input:focus-visible {
 [data-theme="dark"] .odd\:bg-white:nth-child(odd) {
   background-color: #1e293b;
 }
-
 [data-theme="dark"] .even\:bg-slate-50:nth-child(even) {
   background-color: #172033;
 }
-
 [data-theme="dark"] .border-slate-100 {
   border-color: #334155;
 }

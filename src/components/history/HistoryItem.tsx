@@ -11,14 +11,13 @@ export function HistoryItem({
   onLoad: () => void
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 rounded-md border border-slate-200 p-2">
+    <div className="flex items-center justify-between gap-2 rounded-md border border-(--app-border) p-2">
       <div>
-        <p className="text-sm font-medium text-slate-900">{item.name}</p>
-        <p className="text-xs text-slate-500">
+        <p className="text-sm font-medium text-(--app-text)">{item.name}</p>
+        <p className="text-xs text-(--syntax-text)">
           {item.schemaId} - {item.createdAt}
         </p>
       </div>
-
       <Button onClick={onLoad}>Load</Button>
     </div>
   )
