@@ -1,4 +1,7 @@
-export type DataRecord = Record<string, string | number | boolean | null>
+export type DataRecord = Record<
+  string,
+  string | number | boolean | string[] | null
+>
 
 export type QueryResult<T extends DataRecord = DataRecord> = {
   rows: T[]

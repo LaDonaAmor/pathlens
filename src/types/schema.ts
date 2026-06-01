@@ -1,4 +1,10 @@
-export type FieldType = "string" | "number" | "boolean" | "date" | "enum"
+export type FieldType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "date"
+  | "enum"
+  | "array"
 
 export type SchemaField = {
   key: string
