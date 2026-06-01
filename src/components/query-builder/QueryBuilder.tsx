@@ -6,6 +6,8 @@ import { SavedPresets } from "@/components/history/SavedPresets"
 import { QueryPreview } from "@/components/preview/QueryPreview"
 import { ResultsPanel } from "@/components/results/ResultsPanel"
 import { LoadingState } from "@/components/results/LoadingState"
+import { SchemaPreview } from "@/components/schema/SchemaPreview"
+import { SchemaSelector } from "@/components/schema/SchemaSelector"
 import { Toolbar } from "@/components/toolbar/Toolbar"
 import { RuleGroup } from "@/components/query-builder/RuleGroup"
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts"
@@ -64,8 +66,19 @@ export function QueryBuilder() {
           />
         </header>
 
-        <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+        <div className="grid gap-5 lg:grid-cols-[300px_1fr]">
           <aside className="space-y-5 rounded-lg border border-slate-200 bg-white p-4">
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-slate-950">
+                Data Source
+              </h2>
+              <SchemaSelector
+                value={builder.schemaId}
+                onChange={builder.setSchema}
+              />
+            </div>
+
+            <SchemaPreview schema={builder.schema} />
             <QueryHistory />
             <SavedPresets />
           </aside>
