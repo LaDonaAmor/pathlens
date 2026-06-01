@@ -1,7 +1,10 @@
 "use client"
 
+import { QueryPreview } from "@/components/preview/QueryPreview"
+import { ResultsPanel } from "@/components/results/ResultsPanel"
 import { RuleGroup } from "@/components/query-builder/RuleGroup"
 import { useQueryBuilder } from "@/hooks/useQueryBuilder"
+import { Button } from "../ui/button"
 
 export function QueryBuilder() {
   const builder = useQueryBuilder()
@@ -18,13 +21,13 @@ export function QueryBuilder() {
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={builder.reset}
             className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium hover:bg-slate-100"
           >
             Reset
-          </button>
+          </Button>
         </header>
 
         <section className="rounded-lg border border-slate-200 bg-white p-4">
@@ -53,6 +56,20 @@ export function QueryBuilder() {
             onReorder={builder.reorderChild}
           />
         </section>
+
+        <div className="grid gap-5 xl:grid-cols-2">
+          <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <QueryPreview
+              sqlQuery={builder.sqlQuery}
+              mongoQuery={builder.mongoQuery}
+              jsonQuery={builder.jsonQuery}
+            />
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <ResultsPanel data={builder.dataset} tree={builder.tree} />
+          </div>
+        </div>
       </div>
     </main>
   )
