@@ -13,6 +13,15 @@ function toArray(value: unknown) {
   return Array.isArray(value) ? value : [value]
 }
 
+function matchesArray(actual: unknown, expected: unknown) {
+  if (!Array.isArray(actual)) return false
+
+  const actualValues = actual.map(String)
+  const expectedValues = toArray(expected).map(String)
+
+  return expectedValues.some((value) => actualValues.includes(value))
+}
+
 function matchesRule(row: DataRecord, rule: QueryRule) {
   const actual = row[rule.field]
   const expected = rule.value
@@ -38,6 +47,12 @@ function matchesRule(row: DataRecord, rule: QueryRule) {
 
     case "in":
       return toArray(expected).map(String).includes(String(actual))
+
+    case "inArray":
+      return matchesArray(actual, expected)
+
+    case "notInArray":
+      return !matchesArray(actual, expected)
 
     case "between": {
       if (!Array.isArray(expected)) return false
@@ -70,20 +85,12 @@ function matchesRule(row: DataRecord, rule: QueryRule) {
 
     case "after":
       return compareDate(actual, expected) > 0
-
-    default:
-      return false
   }
 }
 
 export function matchesNode(row: DataRecord, node: QueryNode): boolean {
-  if (node.type === "rule") {
-    return matchesRule(row, node)
-  }
-
-  if (node.children.length === 0) {
-    return true
-  }
+  if (node.type === "rule") return matchesRule(row, node)
+  if (node.children.length === 0) return true
 
   return node.logic === "AND"
     ? node.children.every((child) => matchesNode(row, child))
