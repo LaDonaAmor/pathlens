@@ -25,17 +25,22 @@ export function ResultsPanel({
   )
 
   const pageSize = 10
-  const pageCount = Math.ceil(result.rows.length / pageSize)
+
+  const pageCount = useMemo(
+    () => Math.ceil(result.rows.length / pageSize),
+    [result.rows.length]
+  )
 
   const rows = useMemo(
     () => result.rows.slice((page - 1) * pageSize, page * pageSize),
-    [page, pageSize, result.rows]
+    [page, result.rows]
   )
 
   return (
     <section className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Results</h2>
+
         <ResultsCount
           total={result.total}
           executionTimeMs={result.executionTimeMs}
