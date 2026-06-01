@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f1f5f9;
+  --foreground: #0f172a;
 }
 
 [data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
   color-scheme: dark;
 }
 
@@ -16,15 +18,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -38,4 +37,71 @@ button,
 select,
 input {
   font: inherit;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: #1e293b;
+}
+
+[data-theme="dark"] .bg-slate-50 {
+  background-color: #172033;
+}
+
+[data-theme="dark"] .bg-slate-100 {
+  background-color: #0f172a;
+}
+
+[data-theme="dark"] .bg-slate-950 {
+  background-color: #020617;
+}
+
+[data-theme="dark"] .text-slate-950,
+[data-theme="dark"] .text-slate-900,
+[data-theme="dark"] .text-slate-800 {
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .text-slate-700,
+[data-theme="dark"] .text-slate-600,
+[data-theme="dark"] .text-slate-500 {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .border-slate-200,
+[data-theme="dark"] .border-slate-300 {
+  border-color: #334155;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+[data-theme="dark"] option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-panel-in {
+  animation: panel-in 180ms ease-out both;
 }
