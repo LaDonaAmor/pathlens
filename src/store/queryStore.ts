@@ -134,9 +134,25 @@ export type QueryStoreState = {
   reset: () => void
 }
 
+const initialQueryTree: QueryTree = {
+  id: "group_root",
+  type: "group",
+  logic: "AND",
+  collapsed: false,
+  children: [
+    {
+      id: "rule_root",
+      type: "rule",
+      field: schemas[0].fields[0].key,
+      operator: getOperatorsForType(schemas[0].fields[0].type)[0].id,
+      value: getDefaultValue(schemas[0].fields[0].type),
+    },
+  ],
+}
+
 export const useQueryStore = create<QueryStoreState>((set, get) => ({
   schemaId: "users",
-  tree: createGroup("users"),
+  tree: initialQueryTree,
   selectedNodeId: null,
 
   setSchema: (schemaId) =>
