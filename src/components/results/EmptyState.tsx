@@ -1,5 +1,7 @@
 import { SearchX } from "lucide-react"
 
+import { SearchX } from "lucide-react"
+
 export function EmptyState() {
   return (
     <div className="grid place-items-center rounded-md border border-dashed border-(--app-border) p-8 text-center">
