@@ -71,7 +71,7 @@ export function QueryBuilder() {
         <div className="grid gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
           <aside className="animate-panel-in space-y-5 rounded-lg border border-(--app-border) bg-(--app-surface) p-4">
             <div className="space-y-2">
-              <h2 className="text-lg font-semibold text-slate-950">
+              <h2 className="text-lg font-semibold text-(--app-text)">
                 Data Source
               </h2>
               <SchemaSelector
@@ -99,8 +99,8 @@ export function QueryBuilder() {
                 <span
                   className={
                     isValid
-                      ? "rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700"
-                      : "rounded-full px-3 py-1 text-sm font-medium text-(--error)"
+                      ? "rounded-full bg-(--success-bg) px-3 py-1 text-sm font-medium text-(--success)"
+                      : "rounded-full bg-[color-mix(in_srgb,var(--error)_10%,white)] px-3 py-1 text-sm font-medium text-(--error)"
                   }
                 >
                   {isValid
