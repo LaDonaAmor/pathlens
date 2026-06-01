@@ -56,12 +56,7 @@ export function validateQueryTree(
   const operator = getOperatorDefinition(node.operator)
 
   if (!field) {
-    issues.push({
-      nodeId: node.id,
-      message: "Choose a valid field.",
-    })
-
-    return issues
+    return [{ nodeId: node.id, message: "Choose a valid field." }]
   }
 
   if (!operator || !operator.supportedTypes.includes(field.type)) {
@@ -78,6 +73,16 @@ export function validateQueryTree(
     })
   }
 
+  if (
+    field.type === "array" &&
+    !["inArray", "notInArray", "isNull", "isNotNull"].includes(node.operator)
+  ) {
+    issues.push({
+      nodeId: node.id,
+      message: "Array fields only support array membership and null checks.",
+    })
+  }
+
   if (node.operator === "between" && hasEmptyBetweenValue(node.value)) {
     issues.push({
       nodeId: node.id,
@@ -91,20 +96,14 @@ export function validateQueryTree(
       Array.isArray(node.value) &&
       (!isValidDate(node.value[0]) || !isValidDate(node.value[1]))
     ) {
-      issues.push({
-        nodeId: node.id,
-        message: "Enter a valid date range.",
-      })
+      issues.push({ nodeId: node.id, message: "Enter a valid date range." })
     }
 
     if (
       (node.operator === "before" || node.operator === "after") &&
       !isValidDate(node.value)
     ) {
-      issues.push({
-        nodeId: node.id,
-        message: "Enter a valid date.",
-      })
+      issues.push({ nodeId: node.id, message: "Enter a valid date." })
     }
   }
 

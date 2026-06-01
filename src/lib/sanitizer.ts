@@ -4,14 +4,18 @@ import type { SchemaField } from "@/types/schema"
 function sanitizeRule(rule: QueryRule, fields: SchemaField[]): QueryRule {
   const field = fields.find((item) => item.key === rule.field)
 
-  if (!field) {
-    return rule
-  }
+  if (!field) return rule
 
   if (rule.operator === "isNull" || rule.operator === "isNotNull") {
+    return { ...rule, value: null }
+  }
+
+  if (field.type === "array") {
     return {
       ...rule,
-      value: null,
+      value: Array.isArray(rule.value)
+        ? rule.value.map(String).filter(Boolean)
+        : String(rule.value).trim(),
     }
   }
 
@@ -34,10 +38,7 @@ function sanitizeRule(rule: QueryRule, fields: SchemaField[]): QueryRule {
       }
     }
 
-    return {
-      ...rule,
-      value: Number(rule.value || 0),
-    }
+    return { ...rule, value: Number(rule.value || 0) }
   }
 
   if (field.type === "boolean") {
@@ -60,10 +61,7 @@ function sanitizeRule(rule: QueryRule, fields: SchemaField[]): QueryRule {
   }
 
   if (typeof rule.value === "string") {
-    return {
-      ...rule,
-      value: rule.value.trim(),
-    }
+    return { ...rule, value: rule.value.trim() }
   }
 
   return rule
@@ -73,9 +71,7 @@ export function sanitizeQueryTree(
   node: QueryNode,
   fields: SchemaField[]
 ): QueryNode {
-  if (node.type === "rule") {
-    return sanitizeRule(node, fields)
-  }
+  if (node.type === "rule") return sanitizeRule(node, fields)
 
   return {
     ...node,
