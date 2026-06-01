@@ -12,6 +12,7 @@ import { ValueInput } from "./ValueInput"
 export function Rule({
   rule,
   fields,
+  issue,
   onFieldChange,
   onOperatorChange,
   onValueChange,
@@ -19,6 +20,7 @@ export function Rule({
 }: {
   rule: QueryRule
   fields: SchemaField[]
+  issue?: string
   onFieldChange: (field: string) => void
   onOperatorChange: (operator: Operator) => void
   onValueChange: (value: QueryValue) => void
@@ -60,6 +62,10 @@ export function Rule({
           <Trash2 size={16} />
         </Button>
       </div>
+
+      {issue ? (
+        <p className="mt-2 text-xs font-medium text-red-600">{issue}</p>
+      ) : null}
     </div>
   )
 }

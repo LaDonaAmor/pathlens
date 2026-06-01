@@ -1,7 +1,9 @@
 "use client"
+
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useDragAndDrop } from "@/hooks/useDragAndDrop"
+import type { ValidationIssue } from "@/lib/validator"
 import type { Operator } from "@/types/operators"
 import type {
   LogicOperator,
@@ -15,21 +17,10 @@ import { CollapseToggle } from "./CollapseToggle"
 import { GroupLogicToggle } from "./GroupLogicToggle"
 import { Rule } from "./Rule"
 
-const depthClasses: Record<number, string> = {
-  0: "ml-0",
-  1: "ml-4",
-  2: "ml-8",
-  3: "ml-12",
-  4: "ml-16",
-}
-
-function getDepthClass(depth: number): string {
-  return depthClasses[depth] ?? "ml-16"
-}
-
 export function RuleGroup({
   group,
   fields,
+  issues,
   depth = 0,
   isRoot = false,
   onAddRule,
@@ -44,6 +35,7 @@ export function RuleGroup({
 }: {
   group: QueryGroupType
   fields: SchemaField[]
+  issues: ValidationIssue[]
   depth?: number
   isRoot?: boolean
   onAddRule: (groupId: string) => void
@@ -60,21 +52,28 @@ export function RuleGroup({
     onReorder(group.id, fromIndex, toIndex)
   )
 
+  const groupIssue = issues.find((issue) => issue.nodeId === group.id)?.message
+
   return (
     <section
-      className={`rounded-lg border border-slate-300 bg-slate-50 p-3 ${getDepthClass(depth)}`}
+      className={`rounded-lg border border-slate-300 bg-slate-50 p-3 ${
+        depth ? "ml-4" : ""
+      }`}
     >
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <CollapseToggle
           collapsed={group.collapsed}
           onClick={() => onToggle(group.id)}
         />
+
         <GroupLogicToggle
           value={group.logic}
           onChange={(logic) => onLogicChange(group.id, logic)}
         />
+
         <AddRuleButton onClick={() => onAddRule(group.id)} />
         <AddGroupButton onClick={() => onAddGroup(group.id)} />
+
         {!isRoot ? (
           <Button
             onClick={() => onRemove(group.id)}
@@ -85,6 +84,11 @@ export function RuleGroup({
           </Button>
         ) : null}
       </div>
+
+      {groupIssue ? (
+        <p className="mb-3 text-xs font-medium text-red-600">{groupIssue}</p>
+      ) : null}
+
       {!group.collapsed ? (
         <div className="space-y-3">
           {group.children.map((child, index) => (
@@ -97,6 +101,9 @@ export function RuleGroup({
                 <Rule
                   rule={child}
                   fields={fields}
+                  issue={
+                    issues.find((issue) => issue.nodeId === child.id)?.message
+                  }
                   onFieldChange={(field) => onFieldChange(child.id, field)}
                   onOperatorChange={(operator) =>
                     onOperatorChange(child.id, operator)
@@ -108,6 +115,7 @@ export function RuleGroup({
                 <RuleGroup
                   group={child}
                   fields={fields}
+                  issues={issues}
                   depth={depth + 1}
                   onAddRule={onAddRule}
                   onAddGroup={onAddGroup}

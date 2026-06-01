@@ -9,7 +9,10 @@ import {
   generateJsonQuery,
 } from "@/lib/queryEngine"
 import { executeQuery } from "@/lib/queryExecutor"
+import { sanitizeQueryTree } from "@/lib/sanitizer"
+import { validateQueryTree } from "@/lib/validator"
 import { useQueryStore } from "@/store/queryStore"
+import type { QueryTree } from "@/types/query"
 
 export function useQueryBuilder() {
   const store = useQueryStore()
@@ -21,24 +24,42 @@ export function useQueryBuilder() {
 
   const dataset = datasets[store.schemaId as DatasetId]
 
-  const sqlQuery = useMemo(
-    () => generateSqlQuery(store.tree, schema.id),
-    [store.tree, schema.id]
+  const sanitizedTree = useMemo(
+    () => sanitizeQueryTree(store.tree, schema.fields) as QueryTree,
+    [store.tree, schema.fields]
   )
 
-  const mongoQuery = useMemo(() => generateMongoQuery(store.tree), [store.tree])
+  const validationIssues = useMemo(
+    () => validateQueryTree(store.tree, schema),
+    [store.tree, schema]
+  )
 
-  const jsonQuery = useMemo(() => generateJsonQuery(store.tree), [store.tree])
+  const sqlQuery = useMemo(
+    () => generateSqlQuery(sanitizedTree, schema.id),
+    [sanitizedTree, schema.id]
+  )
+
+  const mongoQuery = useMemo(
+    () => generateMongoQuery(sanitizedTree),
+    [sanitizedTree]
+  )
+
+  const jsonQuery = useMemo(
+    () => generateJsonQuery(sanitizedTree),
+    [sanitizedTree]
+  )
 
   const result = useMemo(
-    () => executeQuery(dataset, store.tree),
-    [dataset, store.tree]
+    () => executeQuery(dataset, sanitizedTree),
+    [dataset, sanitizedTree]
   )
 
   return {
     ...store,
     schema,
     dataset,
+    sanitizedTree,
+    validationIssues,
     sqlQuery,
     mongoQuery,
     jsonQuery,
