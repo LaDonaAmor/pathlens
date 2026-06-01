@@ -26,6 +26,6 @@ describe("RuleGroup", () => {
     )
 
     expect(screen.getByText("AND")).toBeInTheDocument()
-    expect(screen.getAllByLabelText("Field").length).toBeGreaterThan(0)
+    expect(screen.getAllByLabelText("Select field").length).toBeGreaterThan(0)
   })
 })
