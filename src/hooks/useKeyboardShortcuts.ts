@@ -27,7 +27,7 @@ export function useKeyboardShortcuts({
         onReset()
       }
 
-      if (isModifier && event.key.toLowerCase() === "s") {
+      if (isModifier && event.key.toLowerCase() === "k") {
         event.preventDefault()
         onSave?.()
       }
