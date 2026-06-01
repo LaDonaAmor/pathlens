@@ -121,8 +121,6 @@ export function executeQuery(
   tree: QueryNode,
   sort?: SortState | null
 ): QueryResult {
-  const start = performance.now()
-
   const rows = sortRows(
     data.filter((row) => matchesNode(row, tree)),
     sort
@@ -131,6 +129,6 @@ export function executeQuery(
   return {
     rows,
     total: rows.length,
-    executionTimeMs: performance.now() - start,
+    executionTimeMs: 0,
   }
 }

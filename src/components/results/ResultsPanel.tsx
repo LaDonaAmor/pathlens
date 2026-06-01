@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { executeQuery } from "@/lib/queryExecutor"
 import type { QueryTree } from "@/types/query"
 import type { DataRecord, SortState } from "@/types/results"
@@ -24,22 +24,36 @@ export function ResultsPanel({
     [data, tree, sort]
   )
 
+  const [executionTimeMs, setExecutionTimeMs] = useState(0)
+
+  useEffect(() => {
+    const frameId = requestAnimationFrame(() => {
+      const start = performance.now()
+      executeQuery(data, tree, sort)
+      setExecutionTimeMs(performance.now() - start)
+    })
+
+    return () => cancelAnimationFrame(frameId)
+  }, [data, tree, sort])
+
   const pageSize = 10
-  const pageCount = Math.ceil(result.rows.length / pageSize)
+
+  const pageCount = useMemo(
+    () => Math.ceil(result.rows.length / pageSize),
+    [result.rows.length]
+  )
 
   const rows = useMemo(
     () => result.rows.slice((page - 1) * pageSize, page * pageSize),
-    [page, pageSize, result.rows]
+    [page, result.rows]
   )
 
   return (
     <section className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Results</h2>
-        <ResultsCount
-          total={result.total}
-          executionTimeMs={result.executionTimeMs}
-        />
+
+        <ResultsCount total={result.total} executionTimeMs={executionTimeMs} />
       </div>
 
       {rows.length ? (
