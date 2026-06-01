@@ -21,70 +21,62 @@ function sqlValue(value: QueryValue): string {
   return `'${escapeSqlString(value)}'`
 }
 
+function arrayAnyClause(field: string, value: QueryValue, negate = false) {
+  const values = Array.isArray(value) ? value : [value]
+  const clauses = values.map((item) => `${sqlValue(item)} = ANY(${field})`)
+
+  if (clauses.length === 1) {
+    return negate ? `NOT (${clauses[0]})` : clauses[0]
+  }
+
+  return negate ? `NOT (${clauses.join(" OR ")})` : `(${clauses.join(" OR ")})`
+}
+
 function ruleToSql(rule: QueryRule) {
   const field = rule.field
 
   switch (rule.operator) {
     case "equals":
       return `${field} = ${sqlValue(rule.value)}`
-
     case "notEquals":
       return `${field} != ${sqlValue(rule.value)}`
-
     case "contains":
       return `${field} LIKE '%${escapeSqlString(String(rule.value))}%'`
-
     case "startsWith":
       return `${field} LIKE '${escapeSqlString(String(rule.value))}%'`
-
     case "greaterThan":
       return `${field} > ${sqlValue(rule.value)}`
-
     case "lessThan":
       return `${field} < ${sqlValue(rule.value)}`
-
     case "in":
       return `${field} IN (${sqlValue(rule.value)})`
-
+    case "inArray":
+      return arrayAnyClause(field, rule.value)
+    case "notInArray":
+      return arrayAnyClause(field, rule.value, true)
     case "between": {
       const [start, end] = Array.isArray(rule.value) ? rule.value : ["", ""]
       return `${field} BETWEEN ${sqlValue(start)} AND ${sqlValue(end)}`
     }
-
     case "isNull":
       return `${field} IS NULL`
-
     case "isNotNull":
       return `${field} IS NOT NULL`
-
     case "regex":
       return `${field} REGEXP ${sqlValue(rule.value)}`
-
     case "before":
       return `${field} < ${sqlValue(rule.value)}`
-
     case "after":
       return `${field} > ${sqlValue(rule.value)}`
-
-    default:
-      return `${field} = ${sqlValue(rule.value)}`
   }
 }
 
 function nodeToSql(node: QueryNode): string {
-  if (node.type === "rule") {
-    return ruleToSql(node)
-  }
-
-  if (node.children.length === 0) {
-    return ""
-  }
+  if (node.type === "rule") return ruleToSql(node)
+  if (node.children.length === 0) return ""
 
   const children = node.children.map(nodeToSql).filter(Boolean)
-
-  if (children.length === 0) {
-    return ""
-  }
+  if (children.length === 0) return ""
 
   return `(${children.join(` ${node.logic} `)})`
 }

@@ -27,7 +27,6 @@ export function ValueInput({
     )
   }
 
-  // BETWEEN (two inputs)
   if (operator === "between") {
     const values = Array.isArray(value) ? value : ["", ""]
     const inputType = field.type === "date" ? "date" : "number"
@@ -48,9 +47,37 @@ export function ValueInput({
     )
   }
 
-  // ENUM FIELD (FIXED ACCESSIBILITY ISSUE)
+  // ARRAY
+  if (field.type === "array") {
+    const id = `array-value-${field.key}`
+
+    return (
+      <div>
+        <label htmlFor={id} className="sr-only">
+          Select value for {field.label}
+        </label>
+
+        <Select
+          id={id}
+          value={
+            Array.isArray(value) ? String(value[0] ?? "") : String(value ?? "")
+          }
+          onChange={(event) => onChange(event.target.value)}
+        >
+          <option value="">Select value</option>
+          {(field.options ?? []).map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </Select>
+      </div>
+    )
+  }
+
+  // ENUM
   if (field.type === "enum") {
-    const id = `enum-${field.key}`
+    const id = `enum-value-${field.key}`
 
     return (
       <div>
@@ -73,9 +100,9 @@ export function ValueInput({
     )
   }
 
-  // BOOLEAN FIELD (FIXED ACCESSIBILITY ISSUE)
+  // BOOLEAN
   if (field.type === "boolean") {
-    const id = `bool-${field.key}`
+    const id = `boolean-value-${field.key}`
 
     return (
       <div>
@@ -88,8 +115,8 @@ export function ValueInput({
           value={String(value)}
           onChange={(event) => onChange(event.target.value === "true")}
         >
-          <option value="true">True</option>
-          <option value="false">False</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </Select>
       </div>
     )
