@@ -59,11 +59,22 @@ export function QueryBuilder() {
   })
 
   function handleNavClick(item: NavItem) {
-    const nextItem = activeNavItem === item ? null : item
-    setActiveNavItem(nextItem)
+    if (item === "schema") {
+      if (schemaOverlayOpen) {
+        setActiveNavItem(null)
+        setSchemaOverlayOpen(false)
+      } else {
+        setActiveNavItem(item)
+        setSchemaOverlayOpen(true)
+      }
+    } else {
+      setActiveNavItem(activeNavItem === item ? null : item)
+    }
+  }
 
-    // Open overlay only for schema, close it for anything else
-    setSchemaOverlayOpen(item === "schema" && nextItem === "schema")
+  function closeSchemaOverlay() {
+    setActiveNavItem(null)
+    setSchemaOverlayOpen(false)
   }
 
   return (
@@ -232,13 +243,13 @@ export function QueryBuilder() {
         <div className="fixed inset-0 z-40">
           <div
             className="absolute inset-0 bg-black/20"
-            onClick={() => setSchemaOverlayOpen(false)}
+            onClick={closeSchemaOverlay}
           />
 
           <aside className="absolute left-70 top-0 h-full w-95 flex flex-col bg-(--app-surface) p-6 border-r-2 border-(--app-border)">
             <div className="flex justify-between mb-6">
               <h3 className="text-xl font-bold">Schema Explorer</h3>
-              <Button onClick={() => setSchemaOverlayOpen(false)}>
+              <Button onClick={closeSchemaOverlay}>
                 <X size={20} />
               </Button>
             </div>
@@ -252,7 +263,7 @@ export function QueryBuilder() {
                 addRuleWithField(builder.tree.id, fieldKey)
                 setSchemaOverlayOpen(false)
               }}
-            />{" "}
+            />
           </aside>
         </div>
       )}
