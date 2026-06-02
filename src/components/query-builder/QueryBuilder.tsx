@@ -112,7 +112,7 @@ export function QueryBuilder() {
               onClick={() => handleNavClick("schema")}
               className={
                 activeNavItem === "schema"
-                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent)"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
                   : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
               }
             >
@@ -120,12 +120,26 @@ export function QueryBuilder() {
               SCHEMA EXPLORER
             </Button>
 
-            <Button onClick={() => setActiveNavItem("presets")}>
+            <Button
+              onClick={() => handleNavClick("presets")}
+              className={
+                activeNavItem === "presets"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
+            >
               <Bookmark size={16} />
               PRESETS
             </Button>
 
-            <Button onClick={() => setActiveNavItem("history")}>
+            <Button
+              onClick={() => handleNavClick("history")}
+              className={
+                activeNavItem === "history"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
+            >
               <History size={16} />
               HISTORY
             </Button>
