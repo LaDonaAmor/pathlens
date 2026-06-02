@@ -8,7 +8,7 @@ export function EmptyState() {
         <p className="text-sm font-medium text-(--app-text-muted)">
           No matching rows
         </p>{" "}
-        <p className="text-xs text-(--syntax-text)">
+        <p className="text-xs text-(--syntax-bg)">
           Adjust the active rules or switch the group logic.
         </p>
       </div>
