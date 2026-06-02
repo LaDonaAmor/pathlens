@@ -7,24 +7,19 @@ export function FieldSelector({
   fields,
   value,
   onChange,
+  id,
 }: {
   fields: SchemaField[]
   value: string
   onChange: (value: string) => void
+  id: string
 }) {
-  const id = "field-select"
-
   return (
     <div>
       <label htmlFor={id} className="sr-only">
         Select field
       </label>
-
-      <Select
-        id={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      >
+      <Select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
         {fields.map((field) => (
           <option key={field.key} value={field.key}>
             {field.label}

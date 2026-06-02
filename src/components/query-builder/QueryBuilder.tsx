@@ -111,7 +111,10 @@ export function QueryBuilder() {
       {/* APP SHELL */}
       <div className="flex lg:flex-1 min-h-0 overflow-hidden max-lg:flex-col max-lg:h-auto">
         {/* LEFT SIDEBAR */}
-        <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:h-auto max-lg:border-b-2">
+        <aside
+          aria-label="Navigation sidebar"
+          className="w-70 shrink-0 h-full flex flex-col border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:h-auto max-lg:border-b-2"
+        >
           <Button
             onClick={builder.reset}
             className="mb-6 flex w-full items-center justify-center gap-2 rounded-md border border-(--app-border-muted) bg-(--app-accent)/5 px-4 py-3 text-sm font-medium text-(--app-text) transition hover:bg-(--app-accent)/10"
@@ -206,7 +209,10 @@ export function QueryBuilder() {
         </section>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-lg:px-4 py-6 max-lg:py-4 border-l-2 max-lg:border-l-0 border-(--app-border) max-lg:w-full max-lg:h-auto max-lg:border-t-2">
+        <aside
+          aria-label="Query preview sidebar"
+          className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-lg:px-4 py-6 max-lg:py-4 border-l-2 max-lg:border-l-0 border-(--app-border) max-lg:w-full max-lg:h-auto max-lg:border-t-2"
+        >
           <h2 className="mb-2 text-2xl max-lg:text-xl font-bold">
             The PathLens Ledger
           </h2>
@@ -249,7 +255,10 @@ export function QueryBuilder() {
             className="absolute inset-0 bg-black/20"
             onClick={closeSchemaOverlay}
           />
-          <aside className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl">
+          <aside
+            aria-label="Schema explorer overlay"
+            className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
+          >
             <div className="mb-6 flex items-center justify-between">
               <h3 className=" text-xl font-bold">Schema Explorer</h3>
               <Button

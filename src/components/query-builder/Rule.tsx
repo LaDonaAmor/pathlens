@@ -55,12 +55,14 @@ export const Rule = memo(function Rule({
         </div>
 
         <FieldSelector
+          id={`${rule.id}-field`}
           fields={fields}
           value={rule.field}
           onChange={onFieldChange}
         />
 
         <OperatorSelector
+          id={`${rule.id}-operator`}
           fieldType={field.type}
           value={rule.operator}
           onChange={onOperatorChange}
