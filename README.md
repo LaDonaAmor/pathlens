@@ -116,6 +116,16 @@ PathLens is optimized through:
 - immutable tree updates
 - paginated result rendering
 
+## Trade-offs
+
+**Zustand over Redux.** We chose Zustand for state management because its API is minimal and fits naturally with the recursive query tree pattern. Actions like `updateNode` and `removeNodeFromTree` traverse the tree immutably using recursive helper functions — Zustand’s simple `set()` pattern keeps boilerplate near zero. Redux would have introduced ceremony (slices, reducers, action creators) without measurable benefit for a single-tree state shape.
+
+**Native HTML Drag and Drop over DnD Kit.** The task’s drag-and-drop requirement is limited to reordering children within a group. Native HTML5 drag events (`onDragStart`/`onDrop`) suffice for this scope, avoiding the 20 kB bundle overhead of a dedicated library. If cross-group drag-and-drop or touch-based reordering were required, we would revisit this choice.
+
+**Synchronous validation over async.** All validation runs synchronously on every keystroke. This gives users instant feedback without debounce latency. The trade-off is that the main thread may block briefly for extremely deep trees (50+ nested levels), but we consider that an edge case that does not justify the architectural complexity of a web-worker-based validator.
+
+**CSS custom properties over Tailwind dark mode classes.** By defining light and dark colors as CSS variables in `globals.css` (`--app-bg`, `--app-text`, etc.) and switching via a `data-theme` attribute, we eliminated the need for `dark:` variants on every element. This kept JSX clean but made the theme system less discoverable for new contributors compared to Tailwind’s convention.
+
 ## Testing
 
 The test suite covers:
