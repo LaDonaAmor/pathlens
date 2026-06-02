@@ -8,6 +8,7 @@ import type { SchemaField } from "@/types/schema"
 import { FieldSelector } from "./FieldSelector"
 import { OperatorSelector } from "./OperatorSelector"
 import { ValueInput } from "./ValueInput"
+import { Badge } from "@/components/ui/badge"
 
 export function Rule({
   rule,
@@ -29,9 +30,9 @@ export function Rule({
   const field = fields.find((item) => item.key === rule.field) ?? fields[0]
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-3 shadow-sm">
+    <div className="rounded-md border border-(--app-border) bg-(--app-surface) p-3 shadow-sm">
       <div className="grid gap-2 md:grid-cols-[24px_minmax(120px,1fr)_minmax(120px,1fr)_minmax(180px,1.4fr)_40px]">
-        <div className="hidden items-center text-slate-400 md:flex">
+        <div className="hidden items-center text-(--app-text-muted) md:flex">
           <GripVertical size={16} />
         </div>
 
@@ -56,16 +57,13 @@ export function Rule({
 
         <Button
           onClick={onRemove}
-          className="h-9 w-9 px-0 text-red-600"
+          className="h-9 w-9 px-0 text-(--error)"
           aria-label="Remove rule"
         >
           <Trash2 size={16} />
         </Button>
       </div>
-
-      {issue ? (
-        <p className="mt-2 text-xs font-medium text-red-600">{issue}</p>
-      ) : null}
+      {issue ? <Badge variant="invalid">{issue}</Badge> : null}
     </div>
   )
 }

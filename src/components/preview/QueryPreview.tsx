@@ -37,7 +37,7 @@ export function QueryPreview({
               onClick={() => setMode(item)}
               className={
                 mode === item
-                  ? "bg-slate-950 text-white hover:bg-slate-800"
+                  ? "border-(--app-accent) bg-(--app-accent) text-white hover:bg-(--app-accent-hover)"
                   : ""
               }
             >

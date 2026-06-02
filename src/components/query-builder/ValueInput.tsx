@@ -21,7 +21,7 @@ export function ValueInput({
 
   if (!definition?.requiresValue) {
     return (
-      <div className="flex h-9 items-center rounded-md border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+      <div className="flex h-9 items-center rounded-md border border-slate-200 bg-slate-50 px-3 text-sm text-(--syntax-text)">
         No value needed
       </div>
     )
@@ -45,6 +45,51 @@ export function ValueInput({
         />
       </div>
     )
+  }
+
+  // IN LIST — multi-value inputs
+  if (operator === "in") {
+    if (field.type === "enum") {
+      const selected = Array.isArray(value) ? value.map(String) : []
+
+      return (
+        <div className="space-y-1">
+          {(field.options ?? []).map((option) => {
+            const isSelected = selected.includes(option)
+            return (
+              <label
+                key={option}
+                className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-slate-100"
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => {
+                    const next = isSelected
+                      ? selected.filter((v) => v !== option)
+                      : [...selected, option]
+                    onChange(next)
+                  }}
+                  className="rounded border-slate-300"
+                />
+                {option}
+              </label>
+            )
+          })}
+        </div>
+      )
+    }
+
+    if (field.type === "number") {
+      return (
+        <Input
+          type="text"
+          value={Array.isArray(value) ? value.join(", ") : String(value ?? "")}
+          placeholder="e.g. 1, 2, 3"
+          onChange={(event) => onChange(event.target.value)}
+        />
+      )
+    }
   }
 
   // ARRAY

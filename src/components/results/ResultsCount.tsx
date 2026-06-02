@@ -8,7 +8,7 @@ export function ResultsCount({
   executionTimeMs: number
 }) {
   return (
-    <p className="text-sm text-slate-600">
+    <p className="text-sm text-(--app-text-muted)">
       Showing {total} matching results in {formatMs(executionTimeMs)}
     </p>
   )

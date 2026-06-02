@@ -5,8 +5,10 @@ export function SchemaPreview({ schema }: { schema: DataSchema }) {
   return (
     <section className="space-y-3">
       <div>
-        <h2 className="text-lg font-semibold text-slate-950">{schema.label}</h2>
-        <p className="text-sm text-slate-600">{schema.description}</p>
+        <h2 className="text-lg font-semibold text-(--app-text)">
+          {schema.label}
+        </h2>
+        <p className="text-sm text-(--app-text-muted)">{schema.description}</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
