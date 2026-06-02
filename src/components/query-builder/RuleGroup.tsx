@@ -111,14 +111,16 @@ export const RuleGroup = memo(function RuleGroup({
         ) : null}
 
         {!group.collapsed ? (
-          <div className="space-y-5 max-lg:space-y-3">
+          <div className="space-y-5 max-lg:space-y-3 animate-group-expand">
             {group.children.map((child, index) => (
               <div
                 key={child.id}
-                {...dnd.getDragProps(index)}
-                className={`relative cursor-pointer pl-5 ${
-                  dnd.dragIndex === index ? "opacity-50" : ""
+                className={`relative cursor-pointer pl-5 animate-rule-enter ${
+                  dnd.dragIndex === index
+                    ? "opacity-50 animate-dnd-highlight"
+                    : ""
                 }`}
+                {...dnd.getDragProps(index)}
               >
                 <span className="absolute left-0 top-6 h-px w-4 bg-(--app-border-muted)" />
                 {child.type === "rule" ? (

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { Folder, Bookmark, History, Plus, X } from "lucide-react"
@@ -156,10 +157,33 @@ export function QueryBuilder() {
               HISTORY
             </Button>
           </nav>
-          <div className="mt-6 space-y-4 overflow-auto">
-            {activeNavItem === "presets" && <SavedPresets />}
-            {activeNavItem === "history" && <QueryHistory />}
-          </div>
+          <AnimatePresence mode="wait">
+            {activeNavItem === "presets" && (
+              <motion.div
+                key="presets"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <SavedPresets />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            {activeNavItem === "history" && (
+              <motion.div
+                key="history"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <QueryHistory />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </aside>
 
         {/* CENTER (ONLY SCROLL AREA) */}
@@ -246,39 +270,51 @@ export function QueryBuilder() {
       </div>
 
       {/* OVERLAY */}
-      {schemaOverlayOpen && (
-        <div className="fixed inset-0 z-40">
-          <div
-            className="absolute inset-0 bg-black/20"
-            onClick={closeSchemaOverlay}
-          />
-          <aside
-            aria-label="Schema explorer overlay"
-            className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
-          >
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className=" text-xl font-bold">Schema Explorer</h3>
-              <Button
-                onClick={() => setSchemaOverlayOpen(false)}
-                className="rounded-md p-2 text-(--app-text-muted) transition hover:bg-(--app-surface-muted)"
-              >
-                <X size={20} />
-              </Button>
-            </div>
-            <SchemaSelector
-              value={builder.schemaId}
-              onChange={builder.setSchema}
+      <AnimatePresence>
+        {schemaOverlayOpen && (
+          <>
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/20"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeSchemaOverlay}
             />
-            <SchemaPreview
-              schema={builder.schema}
-              onAddRule={(fieldKey) => {
-                addRuleWithField(builder.tree.id, fieldKey)
-                setSchemaOverlayOpen(false)
+            <motion.aside
+              initial={{ x: -320 }}
+              animate={{ x: 0 }}
+              exit={{
+                x: -320,
+                transition: { type: "tween", ease: "easeIn", duration: 0.2 },
               }}
-            />
-          </aside>
-        </div>
-      )}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              aria-label="Schema explorer overlay"
+              className="fixed left-70 max-md:left-0 top-0 z-40 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
+            >
+              <div className="mb-6 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Schema Explorer</h3>
+                <Button
+                  onClick={() => setSchemaOverlayOpen(false)}
+                  className="rounded-md p-2 text-(--app-text-muted) transition hover:bg-(--app-surface-muted)"
+                >
+                  <X size={20} />
+                </Button>
+              </div>
+              <SchemaSelector
+                value={builder.schemaId}
+                onChange={builder.setSchema}
+              />
+              <SchemaPreview
+                schema={builder.schema}
+                onAddRule={(fieldKey) => {
+                  addRuleWithField(builder.tree.id, fieldKey)
+                  setSchemaOverlayOpen(false)
+                }}
+              />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </main>
   )
 }
