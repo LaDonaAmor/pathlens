@@ -8,7 +8,7 @@ describe("QueryBuilder", () => {
     renderWithProviders(<QueryBuilder />)
 
     expect(screen.getByText("PathLens")).toBeInTheDocument()
-    expect(screen.getByText("Live Preview")).toBeInTheDocument()
+    expect(screen.getByText("The PathLens Ledger")).toBeInTheDocument()
     expect(screen.getByText("Results")).toBeInTheDocument()
     expect(screen.getByText("Data Source")).toBeInTheDocument()
   })
