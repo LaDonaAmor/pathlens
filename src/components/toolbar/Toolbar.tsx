@@ -16,18 +16,12 @@ export const toolbarBtn =
 export function Toolbar({
   tree,
   schemaId,
-  sqlQuery,
-  mongoQuery,
-  jsonQuery,
   onRun,
   onReset,
   onImport,
 }: {
   tree: QueryTree
   schemaId: string
-  sqlQuery: string
-  mongoQuery: unknown
-  jsonQuery: string
   onRun: () => void
   onReset: () => void
   onImport: (tree: QueryTree) => void
@@ -60,12 +54,7 @@ export function Toolbar({
         <Save size={16} />
         <span className="max-lg:sr-only">Save</span>
       </Button>
-      <ExportButton
-        tree={tree}
-        sqlQuery={sqlQuery}
-        mongoQuery={mongoQuery}
-        jsonQuery={jsonQuery}
-      />
+      <ExportButton tree={tree} />
       <ImportButton onImport={onImport} />
       <Button onClick={onReset} className={toolbarBtn}>
         <RotateCcw size={16} />
