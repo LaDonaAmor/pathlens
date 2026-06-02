@@ -99,9 +99,6 @@ export function QueryBuilder() {
         <Toolbar
           tree={builder.sanitizedTree}
           schemaId={builder.schemaId}
-          sqlQuery={builder.sqlQuery}
-          mongoQuery={builder.mongoQuery}
-          jsonQuery={builder.jsonQuery}
           onRun={runQuery}
           onReset={builder.reset}
           onImport={builder.setTree}
