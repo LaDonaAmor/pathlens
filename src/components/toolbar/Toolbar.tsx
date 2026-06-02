@@ -9,6 +9,7 @@ import { ExportButton } from "./ExportButton"
 import { ImportButton } from "./ImportButton"
 import { ThemeToggle } from "./ThemeToggle"
 import { getQueryName } from "@/lib/queryName"
+import { toast } from "sonner"
 
 export const toolbarBtn =
   "inline-flex h-10 max-lg:h-8 cursor-pointer items-center justify-center gap-2 max-lg:gap-1 border-2 border-(--app-border) bg-(--app-surface) px-4 max-lg:px-2 font-(--font-mono) text-xs uppercase tracking-widest text-(--app-text) transition hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-(--app-accent) hover:text-(--app-on-accent) active:translate-x-0 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
@@ -34,10 +35,16 @@ export function Toolbar({
   function handleRun() {
     addHistory(tree, schemaId)
     onRun()
+    toast.success("Query executed", {
+      description: "The query has been run against the dataset.",
+    })
   }
 
   function handleSave() {
     savePreset(tree, schemaId)
+    toast.success("Query saved", {
+      description: "Added to presets.",
+    })
   }
 
   return (

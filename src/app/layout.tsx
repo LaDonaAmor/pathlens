@@ -3,6 +3,7 @@ import { EB_Garamond, JetBrains_Mono } from "next/font/google"
 import { ThemeProvider } from "@/providers/ThemeProvider"
 import { PreloaderGate } from "@/components/preloader/PreloaderGate"
 import "./globals.css"
+import { Toaster } from "sonner"
 
 const serif = EB_Garamond({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body className={`${serif.variable} ${mono.variable}`}>
         <ThemeProvider>
           <PreloaderGate minDuration={1200}>{children}</PreloaderGate>
+          <Toaster position="bottom-right" richColors />
         </ThemeProvider>
       </body>
     </html>
