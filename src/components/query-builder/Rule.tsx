@@ -3,6 +3,7 @@
 import { GripVertical, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { Operator } from "@/types/operators"
+import { memo } from "react"
 import type { QueryRule, QueryValue } from "@/types/query"
 import type { SchemaField } from "@/types/schema"
 import { FieldSelector } from "./FieldSelector"
@@ -14,7 +15,7 @@ function getTintIndex(id: string) {
   return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
 }
 
-export function Rule({
+export const Rule = memo(function Rule({
   rule,
   fields,
   issue,
@@ -87,4 +88,4 @@ export function Rule({
       ) : null}
     </div>
   )
-}
+})
