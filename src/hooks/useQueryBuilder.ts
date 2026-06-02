@@ -8,7 +8,6 @@ import {
   generateSqlQuery,
   generateJsonQuery,
 } from "@/lib/queryEngine"
-import { executeQuery } from "@/lib/queryExecutor"
 import { sanitizeQueryTree } from "@/lib/sanitizer"
 import { validateQueryTree } from "@/lib/validator"
 import { useQueryStore } from "@/store/queryStore"
@@ -49,11 +48,6 @@ export function useQueryBuilder() {
     [sanitizedTree]
   )
 
-  const result = useMemo(
-    () => executeQuery(dataset, sanitizedTree),
-    [dataset, sanitizedTree]
-  )
-
   return {
     ...store,
     schema,
@@ -63,6 +57,5 @@ export function useQueryBuilder() {
     sqlQuery,
     mongoQuery,
     jsonQuery,
-    result,
   }
 }

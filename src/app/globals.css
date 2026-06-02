@@ -219,3 +219,129 @@ input:focus-visible {
 .animate-execution-stamp {
   animation: execution-stamp 2000ms ease-out both;
 }
+
+@keyframes rule-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 200px;
+  }
+}
+
+@keyframes rule-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    max-height: 200px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    max-height: 0;
+  }
+}
+
+@keyframes group-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 2000px;
+  }
+}
+
+@keyframes group-collapse {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 2000px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+    max-height: 0;
+  }
+}
+
+@keyframes overlay-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes overlay-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+@keyframes dnd-highlight {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 48, 32, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(22, 48, 32, 0.3);
+  }
+}
+
+.animate-rule-enter {
+  animation: rule-enter 200ms ease-out both;
+}
+
+.animate-rule-exit {
+  animation: rule-exit 200ms ease-in both;
+  pointer-events: none;
+}
+
+.animate-group-expand {
+  animation: group-expand 250ms ease-out both;
+  overflow: hidden;
+}
+
+.animate-group-collapse {
+  animation: group-collapse 200ms ease-in both;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.animate-overlay-enter {
+  animation: overlay-enter 200ms ease-out both;
+}
+
+.animate-overlay-exit {
+  animation: overlay-exit 180ms ease-in both;
+  pointer-events: none;
+}
+
+.animate-dnd-highlight {
+  animation: dnd-highlight 600ms ease-in-out both;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+.animate-fade-out {
+  animation: fade-out 200ms ease-out both;
+}

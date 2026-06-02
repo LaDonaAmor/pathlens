@@ -1,6 +1,7 @@
 "use client"
 
 import { Trash2 } from "lucide-react"
+import { getGroupTint } from "@/lib/tints"
 import { Button } from "@/components/ui/button"
 import { useDragAndDrop } from "@/hooks/useDragAndDrop"
 import type { ValidationIssue } from "@/lib/validator"
@@ -55,19 +56,7 @@ export const RuleGroup = memo(function RuleGroup({
 
   const groupIssue = issues.find((issue) => issue.nodeId === group.id)?.message
 
-  const groupTints = [
-    "bg-(--group-tint-1)",
-    "bg-(--group-tint-2)",
-    "bg-(--group-tint-3)",
-    "bg-(--group-tint-4)",
-    "bg-(--group-tint-5)",
-  ]
-
-  function getTintIndex(id: string) {
-    return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
-  }
-
-  const groupTint = groupTints[getTintIndex(group.id)]
+  const groupTint = getGroupTint(group.id)
 
   return (
     <section
@@ -111,14 +100,16 @@ export const RuleGroup = memo(function RuleGroup({
         ) : null}
 
         {!group.collapsed ? (
-          <div className="space-y-5 max-lg:space-y-3">
+          <div className="space-y-5 max-lg:space-y-3 animate-group-expand">
             {group.children.map((child, index) => (
               <div
                 key={child.id}
-                {...dnd.getDragProps(index)}
-                className={`relative cursor-pointer pl-5 ${
-                  dnd.dragIndex === index ? "opacity-50" : ""
+                className={`relative cursor-pointer pl-5 animate-rule-enter ${
+                  dnd.dragIndex === index
+                    ? "opacity-50 animate-dnd-highlight"
+                    : ""
                 }`}
+                {...dnd.getDragProps(index)}
               >
                 <span className="absolute left-0 top-6 h-px w-4 bg-(--app-border-muted)" />
                 {child.type === "rule" ? (

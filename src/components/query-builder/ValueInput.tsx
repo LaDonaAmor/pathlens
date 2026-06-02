@@ -21,7 +21,7 @@ export function ValueInput({
 
   if (!definition?.requiresValue) {
     return (
-      <div className="flex h-9 items-center rounded-md border border-slate-200 bg-slate-50 px-3 text-sm text-(--syntax-text)">
+      <div className="flex h-9 items-center rounded-md border border-(--app-border-muted) bg-(--app-surface-muted) px-3 text-sm text-(--syntax-text)">
         No value needed
       </div>
     )

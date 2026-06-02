@@ -1,5 +1,5 @@
 import { PathLensPreloader } from "@/components/preloader/PathLensPreloader"
 
-export default function BuilderLoading() {
+export default function Loading() {
   return <PathLensPreloader />
 }

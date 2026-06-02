@@ -11,6 +11,16 @@ The name _PathLens_ reflects the core experience of the application:
 
 Built with scalability and maintainability in mind, PathLens uses a recursive query tree architecture that supports unlimited nesting depth while providing a clean and responsive user experience.
 
+## Live Demo
+
+https://pathlens-vqb.vercel.app/builder
+
+---
+
+## GitHub Repository
+
+https://github.com/LaDonaAmor/pathlens
+
 ## Key Features
 
 - Build complex queries visually without writing code

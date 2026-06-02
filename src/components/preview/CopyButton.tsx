@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Copy, Check } from "lucide-react"
 import { Button } from "../ui/button"
 
@@ -19,7 +20,29 @@ export function CopyButton({ value }: { value: string }) {
       className="rounded-md p-1.5 cursor-pointer text-(--syntax-text)/60 transition bg-(--app-accent)/10 hover:bg-(--app-accent)/10 hover:text-(--syntax-text) border-none px-6"
       title="Copy to clipboard"
     >
-      {copied ? <Check size={16} /> : <Copy size={16} />}
+      <AnimatePresence mode="wait">
+        {copied ? (
+          <motion.span
+            key="check"
+            initial={{ scale: 0, rotate: -90 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Check size={16} />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="copy"
+            initial={{ scale: 0, rotate: 90 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: -90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Copy size={16} />
+          </motion.span>
+        )}
+      </AnimatePresence>
     </Button>
   )
 }

@@ -14,7 +14,7 @@ export function QueryHistory() {
 
   return (
     <section className="space-y-2">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 py-4">
         <h2 className="text-lg font-semibold text-(--app-text)">History</h2>
 
         {items.length ? (
