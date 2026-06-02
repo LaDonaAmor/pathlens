@@ -63,9 +63,14 @@ describe("ValueInput", () => {
         onChange={vi.fn()}
       />
     )
-    const inputs = screen.getAllByRole("textbox")
-    expect(inputs.length).toBeGreaterThanOrEqual(2)
-    expect(inputs[0]).toHaveAttribute("type", "date")
+    expect(screen.getByLabelText("Created At start value")).toHaveAttribute(
+      "type",
+      "date"
+    )
+    expect(screen.getByLabelText("Created At end value")).toHaveAttribute(
+      "type",
+      "date"
+    )
   })
 
   it("renders checkboxes for 'in' on enum fields", () => {
@@ -161,7 +166,7 @@ describe("ValueInput", () => {
         onChange={vi.fn()}
       />
     )
-    const input = screen.getByRole("textbox")
+    const input = screen.getByLabelText("Age value")
     expect(input).toHaveAttribute("type", "number")
     expect(input).toHaveValue(25)
   })
@@ -175,7 +180,7 @@ describe("ValueInput", () => {
         onChange={vi.fn()}
       />
     )
-    const input = screen.getByRole("textbox")
+    const input = screen.getByLabelText("Created At value")
     expect(input).toHaveAttribute("type", "date")
     expect(input).toHaveValue("2024-06-01")
   })

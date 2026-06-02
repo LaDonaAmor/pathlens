@@ -1,6 +1,7 @@
 "use client"
 
 import { GripVertical, Trash2 } from "lucide-react"
+import { getRuleTint } from "@/lib/tints"
 import { Button } from "@/components/ui/button"
 import type { Operator } from "@/types/operators"
 import { memo } from "react"
@@ -10,10 +11,6 @@ import { FieldSelector } from "./FieldSelector"
 import { OperatorSelector } from "./OperatorSelector"
 import { ValueInput } from "./ValueInput"
 import { Badge } from "@/components/ui/badge"
-
-function getTintIndex(id: string) {
-  return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
-}
 
 export const Rule = memo(function Rule({
   rule,
@@ -34,16 +31,7 @@ export const Rule = memo(function Rule({
   onRemove: () => void
 }) {
   const field = fields.find((item) => item.key === rule.field) ?? fields[0]
-
-  const ruleTints = [
-    "bg-(--rule-tint-1)",
-    "bg-(--rule-tint-2)",
-    "bg-(--rule-tint-3)",
-    "bg-(--rule-tint-4)",
-    "bg-(--rule-tint-5)",
-  ]
-
-  const ruleTint = ruleTints[getTintIndex(rule.id)]
+  const ruleTint = getRuleTint(rule.id)
 
   return (
     <div
