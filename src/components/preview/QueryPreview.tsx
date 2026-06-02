@@ -3,8 +3,8 @@
 import { CopyButton } from "@/components/preview/CopyButton"
 import { MongoPreview } from "@/components/preview/MongoPreview"
 import { SqlPreview } from "@/components/preview/SqlPreview"
-import { Button } from "@/components/ui/button"
 import { useUiStore } from "@/store/uiStore"
+import { Button } from "../ui/button"
 
 export function QueryPreview({
   sqlQuery,
@@ -26,36 +26,35 @@ export function QueryPreview({
         : jsonQuery
 
   return (
-    <section className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Live Preview</h2>
-
-        <div className="flex flex-wrap gap-2">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-md border border-(--app-border-muted)">
+      <div className="flex items-center justify-between border-b border-(--app-border-muted) bg-(--syntax-bg) pl-2 pr-1">
+        <div className="flex">
           {(["sql", "mongo", "json"] as const).map((item) => (
             <Button
               key={item}
               onClick={() => setMode(item)}
               className={
                 mode === item
-                  ? "border-(--app-accent) bg-(--app-accent) text-white hover:bg-(--app-accent-hover)"
-                  : ""
+                  ? "rounded-none border-0 border-b-2 border-(--app-accent) bg-transparent px-4 py-2 font-(--font-mono) text-xs uppercase tracking-wider text-(--syntax-text) hover:bg-transparent hover:text-(--syntax-text) focus:outline-none focus-visible:outline-none"
+                  : "rounded-none border-0 bg-transparent px-4 py-2 font-(--font-mono) text-xs uppercase tracking-wider text-(--syntax-text)/50 transition hover:bg-transparent hover:text-(--syntax-text)/80 focus:outline-none focus-visible:outline-none"
               }
             >
-              {item.toUpperCase()}
+              {item}
             </Button>
           ))}
-
-          <CopyButton value={copyValue} />
         </div>
+        <CopyButton value={copyValue} />
       </div>
 
-      {mode === "sql" ? (
-        <SqlPreview value={sqlQuery} />
-      ) : mode === "mongo" ? (
-        <MongoPreview value={mongoQuery} />
-      ) : (
-        <SqlPreview value={jsonQuery} />
-      )}
-    </section>
+      <div className="flex-1">
+        {mode === "sql" ? (
+          <SqlPreview value={sqlQuery} />
+        ) : mode === "mongo" ? (
+          <MongoPreview value={mongoQuery} />
+        ) : (
+          <SqlPreview value={jsonQuery} />
+        )}
+      </div>
+    </div>
   )
 }

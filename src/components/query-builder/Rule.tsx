@@ -30,7 +30,7 @@ export function Rule({
   const field = fields.find((item) => item.key === rule.field) ?? fields[0]
 
   return (
-    <div className="rounded-md border border-(--app-border) bg-(--app-surface) p-3 shadow-sm">
+    <div className="rounded-md border border-(--app-border-muted) bg-(--app-surface) p-4 shadow-sm">
       <div className="grid gap-2 md:grid-cols-[24px_minmax(120px,1fr)_minmax(120px,1fr)_minmax(180px,1.4fr)_40px]">
         <div className="hidden items-center text-(--app-text-muted) md:flex">
           <GripVertical size={16} />
