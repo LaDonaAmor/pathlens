@@ -26,6 +26,18 @@
   --syntax-param: #b0ceb7;
   --error: #93000a;
   --success: #163020;
+
+  --group-tint-1: #fffaf3;
+  --group-tint-2: #f7eadc;
+  --group-tint-3: #edf0df;
+  --group-tint-4: #f3e4d2;
+  --group-tint-5: #efe6d8;
+
+  --rule-tint-1: #fcfaf7;
+  --rule-tint-2: #f5ecdf;
+  --rule-tint-3: #eef3e8;
+  --rule-tint-4: #f8ead8;
+  --rule-tint-5: #f0e7dd;
 }
 
 [data-theme="dark"]:root {
@@ -49,18 +61,26 @@
 
   --syntax-bg: #150c06;
   --syntax-text: #f2dfd3;
-  --error: #ffb4ab;
+  --error: #ff412c;
   --success: #b0ceb7;
+
+  --group-tint-1: #231a13;
+  --group-tint-2: #2b1d14;
+  --group-tint-3: #243023;
+  --group-tint-4: #332417;
+  --group-tint-5: #2a211b;
+
+  --rule-tint-1: #1f1711;
+  --rule-tint-2: #2a1b12;
+  --rule-tint-3: #202b21;
+  --rule-tint-4: #302015;
+  --rule-tint-5: #271f19;
 
   color-scheme: dark;
 }
 
 * {
   box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 html {
@@ -74,6 +94,43 @@ body {
   font-family: var(--font-serif);
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.025;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      #000 0,
+      #000 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #000 0,
+      #000 1px,
+      transparent 1px,
+      transparent 11px
+    );
+  mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] body::before {
+  opacity: 0.035;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #fff 0,
+    #fff 1px,
+    transparent 1px,
+    transparent 8px
+  );
+  mix-blend-mode: overlay;
+}
+
 button,
 select,
 input {
@@ -83,7 +140,6 @@ input {
 button:focus-visible,
 select:focus-visible,
 input:focus-visible {
-  outline: 2px solid #334155;
   outline: 2px solid #334155;
   outline-offset: 2px;
 }
@@ -143,4 +199,23 @@ input:focus-visible {
 
 .animate-panel-in {
   animation: panel-in 180ms ease-out both;
+}
+
+@keyframes execution-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.08) rotate(-1deg);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1) rotate(-1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) rotate(-1deg);
+  }
+}
+
+.animate-execution-stamp {
+  animation: execution-stamp 2000ms ease-out both;
 }

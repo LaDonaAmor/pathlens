@@ -128,6 +128,7 @@ export type QueryStoreState = {
   setGroupLogic: (groupId: string, logic: QueryGroup["logic"]) => void
   toggleGroup: (groupId: string) => void
   addRule: (groupId: string) => void
+  addRuleWithField: (groupId: string, fieldKey: string) => void
   addGroup: (groupId: string) => void
   removeNode: (nodeId: string) => void
   reorderChild: (groupId: string, fromIndex: number, toIndex: number) => void
@@ -236,6 +237,14 @@ export const useQueryStore = create<QueryStoreState>((set, get) => ({
       tree: updateGroupChildren(state.tree, groupId, (children) => [
         ...children,
         createGroup(state.schemaId),
+      ]),
+    })),
+
+  addRuleWithField: (groupId, fieldKey) =>
+    set((state) => ({
+      tree: updateGroupChildren(state.tree, groupId, (children) => [
+        ...children,
+        createRule(state.schemaId, fieldKey),
       ]),
     })),
 

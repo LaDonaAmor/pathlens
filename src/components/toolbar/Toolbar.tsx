@@ -8,6 +8,7 @@ import type { QueryTree } from "@/types/query"
 import { ExportButton } from "./ExportButton"
 import { ImportButton } from "./ImportButton"
 import { ThemeToggle } from "./ThemeToggle"
+import { getQueryName } from "@/lib/queryName"
 
 export const toolbarBtn =
   "inline-flex h-10 cursor-pointer items-center justify-center gap-2 border-2 border-(--app-border) bg-(--app-surface) px-4 font-(--font-mono) text-xs uppercase tracking-widest text-(--app-text) transition hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-(--app-accent) hover:text-(--app-on-accent) active:translate-x-0 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
@@ -15,18 +16,26 @@ export const toolbarBtn =
 export function Toolbar({
   tree,
   schemaId,
+  sqlQuery,
+  mongoQuery,
+  jsonQuery,
   onRun,
   onReset,
   onImport,
 }: {
   tree: QueryTree
   schemaId: string
+  sqlQuery: string
+  mongoQuery: unknown
+  jsonQuery: string
   onRun: () => void
   onReset: () => void
   onImport: (tree: QueryTree) => void
 }) {
   const addHistory = useHistoryStore((state) => state.addHistory)
   const savePreset = usePresetsStore((state) => state.savePreset)
+
+  const queryName = getQueryName(tree)
 
   function handleRun() {
     addHistory(tree, schemaId)
@@ -39,24 +48,29 @@ export function Toolbar({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
+      <div className="min-w-48 border border-(--app-border-muted) px-3 py-2 font-(--font-mono) text-[10px] uppercase tracking-[0.12em] text-(--app-text-muted)">
+        Will save as:
+        <span className="ml-1 text-(--app-text)">{queryName}</span>
+      </div>
       <Button onClick={handleRun} className={toolbarBtn}>
         <Play size={16} />
         Run
       </Button>
-
       <Button onClick={handleSave} className={toolbarBtn}>
         <Save size={16} />
         Save
       </Button>
-
-      <ExportButton tree={tree} />
+      <ExportButton
+        tree={tree}
+        sqlQuery={sqlQuery}
+        mongoQuery={mongoQuery}
+        jsonQuery={jsonQuery}
+      />
       <ImportButton onImport={onImport} />
-
       <Button onClick={onReset} className={toolbarBtn}>
         <RotateCcw size={16} />
         Clear
       </Button>
-
       <ThemeToggle />
     </div>
   )
