@@ -5,6 +5,6 @@ async function wait(ms: number) {
 }
 
 export default async function BuilderPage() {
-  await wait(1200)
+  await wait(1400)
   return <QueryBuilder />
 }

@@ -62,91 +62,101 @@ export function RuleGroup({
     "bg-(--group-tint-5)",
   ]
 
-  const groupTint = groupTints[getTintIndex(group.id)]
-
   function getTintIndex(id: string) {
     return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
   }
 
+  const groupTint = groupTints[getTintIndex(group.id)]
+
   return (
     <section
-      className={`border-2 border-(--app-border) p-4 ${groupTint} ${
-        depth ? "ml-5 border-l-4" : ""
+      className={`relative border-2 border-(--app-border) p-4 ${groupTint} ${
+        depth ? "ml-6 border-l-4" : ""
       }`}
     >
-      <div className="mb-5 flex flex-wrap items-center gap-3">
-        <CollapseToggle
-          collapsed={group.collapsed}
-          onClick={() => onToggle(group.id)}
-        />
+      <div className="absolute bottom-4 left-3 top-4 w-px bg-(--app-border-muted)" />
+      <div className="absolute left-2.25 top-6 size-2 border border-(--app-border) bg-(--app-accent)" />
 
-        <GroupLogicToggle
-          value={group.logic}
-          onChange={(logic) => onLogicChange(group.id, logic)}
-        />
+      <div className="relative pl-5">
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <CollapseToggle
+            collapsed={group.collapsed}
+            onClick={() => onToggle(group.id)}
+          />
 
-        <AddRuleButton onClick={() => onAddRule(group.id)} />
-        <AddGroupButton onClick={() => onAddGroup(group.id)} />
+          <GroupLogicToggle
+            value={group.logic}
+            onChange={(logic) => onLogicChange(group.id, logic)}
+          />
 
-        {!isRoot ? (
-          <Button
-            onClick={() => onRemove(group.id)}
-            className="ml-auto h-9 w-9 px-0 text-(--error)"
-            aria-label="Remove group"
-          >
-            <Trash2 size={16} />
-          </Button>
+          <AddRuleButton onClick={() => onAddRule(group.id)} />
+          <AddGroupButton onClick={() => onAddGroup(group.id)} />
+
+          {!isRoot ? (
+            <Button
+              onClick={() => onRemove(group.id)}
+              className="ml-auto h-9 w-9 px-0 text-(--error)"
+              aria-label="Remove group"
+            >
+              <Trash2 size={16} />
+            </Button>
+          ) : null}
+        </div>
+
+        {groupIssue ? (
+          <p className="mb-3 text-xs font-medium text-(--error)">
+            {groupIssue}
+          </p>
+        ) : null}
+
+        {!group.collapsed ? (
+          <div className="space-y-5">
+            {group.children.map((child, index) => (
+              <div
+                key={child.id}
+                {...dnd.getDragProps(index)}
+                className={`relative pl-5 ${
+                  dnd.dragIndex === index ? "opacity-50" : ""
+                }`}
+              >
+                <span className="absolute left-0 top-6 h-px w-4 bg-(--app-border-muted)" />
+                {child.type === "rule" ? (
+                  <Rule
+                    depth={depth}
+                    rule={child}
+                    fields={fields}
+                    issue={
+                      issues.find((issue) => issue.nodeId === child.id)?.message
+                    }
+                    onFieldChange={(field) => onFieldChange(child.id, field)}
+                    onOperatorChange={(operator) =>
+                      onOperatorChange(child.id, operator)
+                    }
+                    onValueChange={(value) => onValueChange(child.id, value)}
+                    onRemove={() => onRemove(child.id)}
+                  />
+                ) : (
+                  <RuleGroup
+                    group={child}
+                    fields={fields}
+                    issues={issues}
+                    depth={depth + 1}
+                    onAddRule={onAddRule}
+                    onAddGroup={onAddGroup}
+                    onRemove={onRemove}
+                    onToggle={onToggle}
+                    onLogicChange={onLogicChange}
+                    onFieldChange={onFieldChange}
+                    onOperatorChange={onOperatorChange}
+                    onValueChange={onValueChange}
+                    onReorder={onReorder}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         ) : null}
       </div>
-
-      {groupIssue ? (
-        <p className="mb-3 text-xs font-medium text-(--error)">{groupIssue}</p>
-      ) : null}
-
-      {!group.collapsed ? (
-        <div className="space-y-5">
-          {group.children.map((child, index) => (
-            <div
-              key={child.id}
-              {...dnd.getDragProps(index)}
-              className={dnd.dragIndex === index ? "opacity-50" : ""}
-            >
-              {child.type === "rule" ? (
-                <Rule
-                  depth={depth}
-                  rule={child}
-                  fields={fields}
-                  issue={
-                    issues.find((issue) => issue.nodeId === child.id)?.message
-                  }
-                  onFieldChange={(field) => onFieldChange(child.id, field)}
-                  onOperatorChange={(operator) =>
-                    onOperatorChange(child.id, operator)
-                  }
-                  onValueChange={(value) => onValueChange(child.id, value)}
-                  onRemove={() => onRemove(child.id)}
-                />
-              ) : (
-                <RuleGroup
-                  group={child}
-                  fields={fields}
-                  issues={issues}
-                  depth={depth + 1}
-                  onAddRule={onAddRule}
-                  onAddGroup={onAddGroup}
-                  onRemove={onRemove}
-                  onToggle={onToggle}
-                  onLogicChange={onLogicChange}
-                  onFieldChange={onFieldChange}
-                  onOperatorChange={onOperatorChange}
-                  onValueChange={onValueChange}
-                  onReorder={onReorder}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      ) : null}
     </section>
   )
 }

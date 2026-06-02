@@ -26,7 +26,7 @@ export function QueryPreview({
         : jsonQuery
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-md border border-(--app-border-muted)">
+    <div className="flex flex-col overflow-hidden rounded-md border border-(--app-border-muted)">
       <div className="flex items-center justify-between border-b border-(--app-border-muted) bg-(--syntax-bg) pl-2 pr-1">
         <div className="flex">
           {(["sql", "mongo", "json"] as const).map((item) => (
@@ -46,13 +46,13 @@ export function QueryPreview({
         <CopyButton value={copyValue} />
       </div>
 
-      <div className="flex-1">
+      <div className="min-h-0">
         {mode === "sql" ? (
-          <SqlPreview value={sqlQuery} />
+          <SqlPreview value={sqlQuery} mode="sql" />
         ) : mode === "mongo" ? (
           <MongoPreview value={mongoQuery} />
         ) : (
-          <SqlPreview value={jsonQuery} />
+          <SqlPreview value={jsonQuery} mode="json" />
         )}
       </div>
     </div>

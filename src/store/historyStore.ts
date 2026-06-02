@@ -1,9 +1,8 @@
-"use client"
-
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { generateId } from "@/lib/utils"
 import type { QueryTree } from "@/types/query"
+import { getQueryName } from "@/lib/queryName"
 
 export type HistoryItem = {
   id: string
@@ -16,28 +15,8 @@ export type HistoryItem = {
 type HistoryState = {
   items: HistoryItem[]
   addHistory: (tree: QueryTree, schemaId: string) => void
+  removeHistory: (historyId: string) => void
   clearHistory: () => void
-}
-
-function getQueryName(tree: QueryTree, fallback: string) {
-  const firstRule = tree.children.find((child) => child.type === "rule")
-
-  if (firstRule?.type === "rule") {
-    return `${firstRule.field} ${firstRule.operator} ${String(firstRule.value || "value")}`
-  }
-
-  const groupCount = tree.children.filter(
-    (child) => child.type === "group"
-  ).length
-  const ruleCount = tree.children.filter(
-    (child) => child.type === "rule"
-  ).length
-
-  if (ruleCount || groupCount) {
-    return `${tree.logic} query: ${ruleCount} rule${ruleCount === 1 ? "" : "s"}, ${groupCount} group${groupCount === 1 ? "" : "s"}`
-  }
-
-  return fallback
 }
 
 export const useHistoryStore = create<HistoryState>()(
@@ -57,6 +36,11 @@ export const useHistoryStore = create<HistoryState>()(
             },
             ...state.items,
           ].slice(0, 10),
+        })),
+
+      removeHistory: (historyId) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== historyId),
         })),
 
       clearHistory: () => set({ items: [] }),

@@ -30,10 +30,13 @@ export function QueryBuilder() {
   const addHistory = useHistoryStore((state) => state.addHistory)
   const savePreset = usePresetsStore((state) => state.savePreset)
 
+  const [executionStampKey, setExecutionStampKey] = useState(0)
+
   const isValid = builder.validationIssues.length === 0
 
   function runQuery() {
     if (!isValid) return
+    setExecutionStampKey((key) => key + 1)
     setRunning(true)
     window.setTimeout(() => setRunning(false), 350)
   }
@@ -54,7 +57,6 @@ export function QueryBuilder() {
 
   function handleNavClick(item: NavItem) {
     const nextItem = activeNavItem === item ? null : item
-
     setActiveNavItem(nextItem)
 
     if (item === "schema" && nextItem === "schema") {
@@ -63,9 +65,9 @@ export function QueryBuilder() {
   }
 
   return (
-    <main className="min-h-screen bg-(--app-bg) text-(--app-text)">
+    <main className="h-screen overflow-hidden bg-(--app-bg) text-(--app-text)">
       {/* HEADER */}
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-4 shadow-[0_2px_0_var(--app-border)]">
+      <header className="h-19 shrink-0 sticky top-0 z-30 flex items-center justify-between border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-14 shadow-[0_2px_0_var(--app-accent)]">
         <div>
           <h1 className="flex items-center gap-2 text-5xl font-bold italic tracking-tight">
             <Image
@@ -80,19 +82,23 @@ export function QueryBuilder() {
             Build complex queries through a clearer lens.
           </p>
         </div>
+
         <Toolbar
           tree={builder.sanitizedTree}
           schemaId={builder.schemaId}
+          sqlQuery={builder.sqlQuery}
+          mongoQuery={builder.mongoQuery}
+          jsonQuery={builder.jsonQuery}
           onRun={runQuery}
           onReset={builder.reset}
           onImport={builder.setTree}
         />
       </header>
 
-      {/* MAIN 3-COLUMN LAYOUT */}
-      <div className="grid min-h-[calc(100vh-76px)] lg:grid-cols-[280px_1fr_380px]">
-        {/* LEFT NAV */}
-        <aside className="flex flex-col border-r-2 border-(--app-border) bg-(--app-surface-muted) px-4 py-10">
+      {/* APP SHELL */}
+      <div className="flex h-[calc(100vh-76px)] overflow-hidden">
+        {/* LEFT SIDEBAR */}
+        <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 border-(--app-border) bg-(--app-surface-muted) px-4 py-10">
           <Button
             onClick={builder.reset}
             className="mb-6 flex w-full items-center justify-center gap-2 rounded-md border border-(--app-border-muted) bg-(--app-accent)/5 px-4 py-3 text-sm font-medium text-(--app-text) transition hover:bg-(--app-accent)/10"
@@ -106,62 +112,36 @@ export function QueryBuilder() {
               onClick={() => handleNavClick("schema")}
               className={
                 activeNavItem === "schema"
-                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
-                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) transition hover:border-(--app-border-muted) hover:bg-(--app-surface-raised)"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
               }
             >
               <Folder size={16} />
               SCHEMA EXPLORER
             </Button>
-            <Button
-              onClick={() => setActiveNavItem("presets")}
-              className={
-                activeNavItem === "presets"
-                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
-                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) transition hover:border-(--app-border-muted) hover:bg-(--app-surface-raised)"
-              }
-            >
+
+            <Button onClick={() => setActiveNavItem("presets")}>
               <Bookmark size={16} />
               PRESETS
             </Button>
-            <Button
-              onClick={() => setActiveNavItem("history")}
-              className={
-                activeNavItem === "history"
-                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
-                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) transition hover:border-(--app-border-muted) hover:bg-(--app-surface-raised)"
-              }
-            >
+
+            <Button onClick={() => setActiveNavItem("history")}>
               <History size={16} />
               HISTORY
             </Button>
           </nav>
 
-          {/* Content sections below nav */}
           <div className="mt-6 space-y-4 overflow-auto">
             {activeNavItem === "presets" && <SavedPresets />}
             {activeNavItem === "history" && <QueryHistory />}
           </div>
         </aside>
 
-        {/* CENTER CONTENT */}
-        <section className="flex min-w-0 flex-col border-r-2 border-(--app-border)">
+        {/* CENTER (ONLY SCROLL AREA) */}
+        <section className="flex-1 min-w-0 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
           <div className="border-b-2 border-(--app-border) p-6">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-2xl font-bold">Active Composition</h2>
+            <h2 className="text-2xl font-bold mb-4">Active Composition</h2>
 
-              <span
-                className={
-                  isValid
-                    ? "border border-(--success) bg-(--app-surface) px-3 py-1 font-(--font-mono) text-xs uppercase tracking-[0.12em] text-(--success)"
-                    : "border border-(--error) bg-(--app-surface) px-3 py-1 font-(--font-mono) text-xs uppercase tracking-[0.12em] text-(--error)"
-                }
-              >
-                {isValid
-                  ? "Valid query"
-                  : `${builder.validationIssues.length} issue(s)`}
-              </span>
-            </div>{" "}
             <RuleGroup
               group={builder.tree}
               fields={builder.schema.fields}
@@ -183,85 +163,74 @@ export function QueryBuilder() {
 
           <div className="flex-1 p-6">
             <h2 className="mb-4 text-2xl font-bold">Filtered Ledger</h2>
+
             {running ? (
               <LoadingState />
             ) : (
               <ResultsPanel
                 data={builder.dataset}
                 tree={builder.sanitizedTree}
+                stampKey={executionStampKey}
               />
             )}
           </div>
         </section>
 
-        {/* RIGHT PANEL */}
-        <aside className="flex flex-col bg-(--app-surface-muted) px-6 py-10">
-          <h2 className="mb-2  text-2xl font-bold">The PathLens Ledger</h2>
-          <div className="flex flex-1 flex-col">
-            <QueryPreview
-              sqlQuery={builder.sqlQuery}
-              mongoQuery={builder.mongoQuery}
-              jsonQuery={builder.jsonQuery}
-            />
-          </div>
-          <div className="mt-auto border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-(--app-text)">
+        {/* RIGHT SIDEBAR */}
+        <aside className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 py-6 border-l-2 border-(--app-border)">
+          <h2 className="mb-2 text-2xl font-bold">The PathLens Ledger</h2>
+
+          <QueryPreview
+            sqlQuery={builder.sqlQuery}
+            mongoQuery={builder.mongoQuery}
+            jsonQuery={builder.jsonQuery}
+          />
+
+          <div className="mt-6 border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em]">
               Keyboard Shortcuts
             </h3>
 
-            <dl className="space-y-2 text-xs text-(--app-text-muted)">
-              <div className="flex items-center justify-between gap-4">
-                <dt>Run query</dt>
-                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
-                  Ctrl / Cmd + Enter
-                </dd>
+            <dl className="space-y-2 text-xs">
+              <div className="flex justify-between">
+                <dt>Run</dt>
+                <dd>Ctrl + Enter</dd>
               </div>
 
-              <div className="flex items-center justify-between gap-4">
-                <dt>Reset query</dt>
-                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
-                  Ctrl / Cmd + Backspace
-                </dd>
+              <div className="flex justify-between">
+                <dt>Reset</dt>
+                <dd>Ctrl + Backspace</dd>
               </div>
 
-              <div className="flex items-center justify-between gap-4">
-                <dt>Save query</dt>
-                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
-                  Ctrl / Cmd + K
-                </dd>
+              <div className="flex justify-between">
+                <dt>Save</dt>
+                <dd>Ctrl + K</dd>
               </div>
             </dl>
           </div>
         </aside>
       </div>
 
-      {/* SCHEMA OVERLAY */}
+      {/* OVERLAY */}
       {schemaOverlayOpen && (
         <div className="fixed inset-0 z-40">
           <div
             className="absolute inset-0 bg-black/20"
             onClick={() => setSchemaOverlayOpen(false)}
           />
-          <aside className="absolute left-70 top-0 flex h-full w-95 flex-col border-r-2 border-(--app-border) bg-(--app-surface) p-6 shadow-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className=" text-xl font-bold">Schema Explorer</h3>
-              <Button
-                onClick={() => setSchemaOverlayOpen(false)}
-                className="rounded-md p-2 text-(--app-text-muted) transition hover:bg-(--app-surface-muted)"
-              >
+
+          <aside className="absolute left-70 top-0 h-full w-95 flex flex-col bg-(--app-surface) p-6 border-r-2 border-(--app-border)">
+            <div className="flex justify-between mb-6">
+              <h3 className="text-xl font-bold">Schema Explorer</h3>
+              <Button onClick={() => setSchemaOverlayOpen(false)}>
                 <X size={20} />
               </Button>
             </div>
 
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-medium text-(--app-text-muted)">
-                Data Source
-              </label>
-              <SchemaSelector
-                value={builder.schemaId}
-                onChange={builder.setSchema}
-              />
-            </div>
+            <SchemaSelector
+              value={builder.schemaId}
+              onChange={builder.setSchema}
+            />
 
             <SchemaPreview schema={builder.schema} />
           </aside>

@@ -12,9 +12,11 @@ import { ResultsTable } from "./ResultsTable"
 export function ResultsPanel({
   data,
   tree,
+  stampKey = 0,
 }: {
   data: DataRecord[]
   tree: QueryTree
+  stampKey?: number
 }) {
   const [page, setPage] = useState(1)
   const [sort, setSort] = useState<SortState | null>(null)
@@ -55,6 +57,15 @@ export function ResultsPanel({
 
         <ResultsCount total={result.total} executionTimeMs={executionTimeMs} />
       </div>
+
+      {stampKey > 0 ? (
+        <div
+          key={stampKey}
+          className="animate-execution-stamp inline-flex border-2 border-(--app-accent) bg-(--app-surface) px-3 py-2 font-(--font-mono) text-xs uppercase tracking-[0.14em] text-(--app-accent)"
+        >
+          Executed · {result.total} rows · {executionTimeMs.toFixed(1)}ms
+        </div>
+      ) : null}
 
       {rows.length ? (
         <ResultsTable rows={rows} sort={sort} onSortChange={setSort} />
