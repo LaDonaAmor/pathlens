@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { Folder, Bookmark, History, Plus, X } from "lucide-react"
+import { useQueryStore } from "@/store/queryStore"
 import { QueryHistory } from "@/components/history/QueryHistory"
 import { SavedPresets } from "@/components/history/SavedPresets"
 import { QueryPreview } from "@/components/preview/QueryPreview"
@@ -32,6 +33,8 @@ export function QueryBuilder() {
 
   const [executionStampKey, setExecutionStampKey] = useState(0)
 
+  const addRuleWithField = useQueryStore((state) => state.addRuleWithField)
+
   const isValid = builder.validationIssues.length === 0
 
   function runQuery() {
@@ -59,9 +62,8 @@ export function QueryBuilder() {
     const nextItem = activeNavItem === item ? null : item
     setActiveNavItem(nextItem)
 
-    if (item === "schema" && nextItem === "schema") {
-      setSchemaOverlayOpen(true)
-    }
+    // Open overlay only for schema, close it for anything else
+    setSchemaOverlayOpen(item === "schema" && nextItem === "schema")
   }
 
   return (
@@ -240,13 +242,17 @@ export function QueryBuilder() {
                 <X size={20} />
               </Button>
             </div>
-
             <SchemaSelector
               value={builder.schemaId}
               onChange={builder.setSchema}
             />
-
-            <SchemaPreview schema={builder.schema} />
+            <SchemaPreview
+              schema={builder.schema}
+              onAddRule={(fieldKey) => {
+                addRuleWithField(builder.tree.id, fieldKey)
+                setSchemaOverlayOpen(false)
+              }}
+            />{" "}
           </aside>
         </div>
       )}
