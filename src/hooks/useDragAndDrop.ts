@@ -11,12 +11,12 @@ export function useDragAndDrop(
     return {
       draggable: true,
       onDragStart: () => setDragIndex(index),
-      onDragOver: (event: React.DragEvent) => event.preventDefault(),
-      onDrop: () => {
+      onDragOver: (e: React.DragEvent) => e.preventDefault(),
+      onDrop: (e: React.DragEvent) => {
+        e.preventDefault()
         if (dragIndex !== null && dragIndex !== index) {
           onReorder(dragIndex, index)
         }
-
         setDragIndex(null)
       },
       onDragEnd: () => setDragIndex(null),
