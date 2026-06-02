@@ -1,6 +1,7 @@
 "use client"
 
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 import { schemas } from "@/data/schema"
 import { generateId, moveItem } from "@/lib/utils"
 import { getOperatorsForType } from "@/types/operators"
@@ -151,124 +152,133 @@ const initialQueryTree: QueryTree = {
   ],
 }
 
-export const useQueryStore = create<QueryStoreState>((set, get) => ({
-  schemaId: "users",
-  tree: initialQueryTree,
-  selectedNodeId: null,
-
-  setSchema: (schemaId) =>
-    set((state) => ({
-      schemaId,
-      tree: replaceInvalidRulesForSchema(state.tree, schemaId) as QueryTree,
+export const useQueryStore = create<QueryStoreState>()(
+  persist(
+    (set, get) => ({
+      schemaId: "users",
+      tree: initialQueryTree,
       selectedNodeId: null,
-    })),
 
-  setTree: (tree) => set({ tree }),
+      setSchema: (schemaId) =>
+        set((state) => ({
+          schemaId,
+          tree: replaceInvalidRulesForSchema(state.tree, schemaId) as QueryTree,
+          selectedNodeId: null,
+        })),
 
-  setSelectedNode: (selectedNodeId) => set({ selectedNodeId }),
+      setTree: (tree) => set({ tree }),
 
-  updateRule: (ruleId, patch) =>
-    set((state) => ({
-      tree: updateNode(state.tree, ruleId, (node) =>
-        node.type === "rule" ? { ...node, ...patch } : node
-      ) as QueryTree,
-    })),
+      setSelectedNode: (selectedNodeId) => set({ selectedNodeId }),
 
-  setRuleField: (ruleId, fieldKey) =>
-    set((state) => {
-      const field = getSchemaField(state.schemaId, fieldKey)
-      const operator = getOperatorsForType(field.type)[0].id
+      updateRule: (ruleId, patch) =>
+        set((state) => ({
+          tree: updateNode(state.tree, ruleId, (node) =>
+            node.type === "rule" ? { ...node, ...patch } : node
+          ) as QueryTree,
+        })),
 
-      return {
-        tree: updateNode(state.tree, ruleId, (node) =>
-          node.type === "rule"
-            ? {
-                ...node,
-                field: field.key,
-                operator,
-                value: getDefaultValue(field.type),
-              }
-            : node
-        ) as QueryTree,
-      }
+      setRuleField: (ruleId, fieldKey) =>
+        set((state) => {
+          const field = getSchemaField(state.schemaId, fieldKey)
+          const operator = getOperatorsForType(field.type)[0].id
+
+          return {
+            tree: updateNode(state.tree, ruleId, (node) =>
+              node.type === "rule"
+                ? {
+                    ...node,
+                    field: field.key,
+                    operator,
+                    value: getDefaultValue(field.type),
+                  }
+                : node
+            ) as QueryTree,
+          }
+        }),
+
+      setRuleOperator: (ruleId, operator) =>
+        set((state) => ({
+          tree: updateNode(state.tree, ruleId, (node) => {
+            if (node.type !== "rule") return node
+
+            if (
+              operator === "isNull" ||
+              operator === "isNotNull" ||
+              operator === "between"
+            ) {
+              return { ...node, operator, value: null }
+            }
+
+            return { ...node, operator, value: null }
+          }) as QueryTree,
+        })),
+
+      setGroupLogic: (groupId, logic) =>
+        set((state) => ({
+          tree: updateNode(state.tree, groupId, (node) =>
+            node.type === "group" ? { ...node, logic } : node
+          ) as QueryTree,
+        })),
+
+      toggleGroup: (groupId) =>
+        set((state) => ({
+          tree: updateNode(state.tree, groupId, (node) =>
+            node.type === "group"
+              ? { ...node, collapsed: !node.collapsed }
+              : node
+          ) as QueryTree,
+        })),
+
+      addRule: (groupId) =>
+        set((state) => ({
+          tree: updateGroupChildren(state.tree, groupId, (children) => [
+            ...children,
+            createRule(state.schemaId),
+          ]),
+        })),
+
+      addGroup: (groupId) =>
+        set((state) => ({
+          tree: updateGroupChildren(state.tree, groupId, (children) => [
+            ...children,
+            createGroup(state.schemaId),
+          ]),
+        })),
+
+      addRuleWithField: (groupId, fieldKey) =>
+        set((state) => ({
+          tree: updateGroupChildren(state.tree, groupId, (children) => [
+            ...children,
+            createRule(state.schemaId, fieldKey),
+          ]),
+        })),
+
+      removeNode: (nodeId) =>
+        set((state) => {
+          if (state.tree.id === nodeId) return state
+
+          return {
+            tree: removeNodeFromTree(state.tree, nodeId) as QueryTree,
+            selectedNodeId:
+              state.selectedNodeId === nodeId ? null : state.selectedNodeId,
+          }
+        }),
+
+      reorderChild: (groupId, fromIndex, toIndex) =>
+        set((state) => ({
+          tree: updateGroupChildren(state.tree, groupId, (children) =>
+            moveItem(children, fromIndex, toIndex)
+          ),
+        })),
+
+      reset: () =>
+        set({
+          tree: createGroup(get().schemaId),
+          selectedNodeId: null,
+        }),
     }),
-
-  setRuleOperator: (ruleId, operator) =>
-    set((state) => ({
-      tree: updateNode(state.tree, ruleId, (node) => {
-        if (node.type !== "rule") return node
-
-        if (
-          operator === "isNull" ||
-          operator === "isNotNull" ||
-          operator === "between"
-        ) {
-          return { ...node, operator, value: null }
-        }
-
-        return { ...node, operator, value: null } // ← was getDefaultValue(field.type)
-      }) as QueryTree,
-    })),
-
-  setGroupLogic: (groupId, logic) =>
-    set((state) => ({
-      tree: updateNode(state.tree, groupId, (node) =>
-        node.type === "group" ? { ...node, logic } : node
-      ) as QueryTree,
-    })),
-
-  toggleGroup: (groupId) =>
-    set((state) => ({
-      tree: updateNode(state.tree, groupId, (node) =>
-        node.type === "group" ? { ...node, collapsed: !node.collapsed } : node
-      ) as QueryTree,
-    })),
-
-  addRule: (groupId) =>
-    set((state) => ({
-      tree: updateGroupChildren(state.tree, groupId, (children) => [
-        ...children,
-        createRule(state.schemaId),
-      ]),
-    })),
-
-  addGroup: (groupId) =>
-    set((state) => ({
-      tree: updateGroupChildren(state.tree, groupId, (children) => [
-        ...children,
-        createGroup(state.schemaId),
-      ]),
-    })),
-
-  addRuleWithField: (groupId, fieldKey) =>
-    set((state) => ({
-      tree: updateGroupChildren(state.tree, groupId, (children) => [
-        ...children,
-        createRule(state.schemaId, fieldKey),
-      ]),
-    })),
-
-  removeNode: (nodeId) =>
-    set((state) => {
-      if (state.tree.id === nodeId) return state
-
-      return {
-        tree: removeNodeFromTree(state.tree, nodeId) as QueryTree,
-        selectedNodeId:
-          state.selectedNodeId === nodeId ? null : state.selectedNodeId,
-      }
-    }),
-
-  reorderChild: (groupId, fromIndex, toIndex) =>
-    set((state) => ({
-      tree: updateGroupChildren(state.tree, groupId, (children) =>
-        moveItem(children, fromIndex, toIndex)
-      ),
-    })),
-
-  reset: () =>
-    set({
-      tree: createGroup(get().schemaId),
-      selectedNodeId: null,
-    }),
-}))
+    {
+      name: "pathlens-query",
+    }
+  )
+)
