@@ -8,13 +8,13 @@ export function OperatorSelector({
   fieldType,
   value,
   onChange,
+  id,
 }: {
   fieldType: FieldType
   value: Operator
   onChange: (value: Operator) => void
+  id: string
 }) {
-  const id = "operator-select"
-
   return (
     <div>
       <label htmlFor={id} className="sr-only">

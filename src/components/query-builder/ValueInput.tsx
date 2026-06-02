@@ -36,11 +36,13 @@ export function ValueInput({
         <Input
           type={inputType}
           value={String(values[0] ?? "")}
+          aria-label={`${field.label} start value`}
           onChange={(event) => onChange([event.target.value, values[1] ?? ""])}
         />
         <Input
           type={inputType}
           value={String(values[1] ?? "")}
+          aria-label={`${field.label} end value`}
           onChange={(event) => onChange([values[0] ?? "", event.target.value])}
         />
       </div>
@@ -179,6 +181,7 @@ export function ValueInput({
       }
       value={Array.isArray(value) ? value.join(", ") : String(value ?? "")}
       placeholder={operator === "in" ? "Comma separated values" : "Value"}
+      aria-label={`${field.label} value`}
       onChange={(event) => onChange(event.target.value)}
     />
   )

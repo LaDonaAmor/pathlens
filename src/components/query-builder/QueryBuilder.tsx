@@ -78,30 +78,27 @@ export function QueryBuilder() {
   }
 
   return (
-    <main className="h-screen overflow-hidden max-xl:overflow-auto max-xl:min-h-screen bg-(--app-bg) text-(--app-text)">
+    <main className="h-screen lg:flex lg:flex-col overflow-hidden max-lg:overflow-auto max-lg:min-h-screen bg-(--app-bg) text-(--app-text)">
       {/* HEADER */}
-      <header className="h-19 max-xl:h-auto shrink-0 sticky top-0 z-30 flex items-center justify-between max-xl:flex-col max-xl:gap-3 border-b-2 border-(--app-border) bg-(--app-surface) px-6 max-xl:px-4 py-14 max-xl:py-4 shadow-[0_2px_0_var(--app-accent)]">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-6 shadow-[0_2px_0_var(--app-accent)]">
         <div>
-          <h1 className="flex items-center gap-2 text-5xl max-xl:text-2xl font-bold italic tracking-tight">
+          <h1 className="flex items-center gap-2 text-5xl max-lg:text-2xl font-bold italic tracking-tight">
             <Image
               src="/favicon.ico"
               alt="PathLens logo"
               width={50}
               height={50}
-              className="max-xl:w-8 max-xl:h-8"
+              className="max-lg:w-8 max-lg:h-8"
             />
             PathLens
           </h1>
-          <p className="mt-1 max-w-2xl text-sm text-(--app-text-muted) max-xl:hidden">
+          <p className="mt-1 max-w-2xl text-sm text-(--app-text-muted) max-lg:hidden">
             Build complex queries through a clearer lens.
           </p>
         </div>
         <Toolbar
           tree={builder.sanitizedTree}
           schemaId={builder.schemaId}
-          sqlQuery={builder.sqlQuery}
-          mongoQuery={builder.mongoQuery}
-          jsonQuery={builder.jsonQuery}
           onRun={runQuery}
           onReset={builder.reset}
           onImport={builder.setTree}
@@ -109,9 +106,12 @@ export function QueryBuilder() {
       </header>
 
       {/* APP SHELL */}
-      <div className="flex h-[calc(100vh-76px)] overflow-hidden max-xl:flex-col max-xl:h-auto">
+      <div className="flex lg:flex-1 min-h-0 overflow-hidden max-lg:flex-col max-lg:h-auto">
         {/* LEFT SIDEBAR */}
-        <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 max-xl:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-xl:px-3 py-10 max-xl:py-4 max-xl:w-full max-xl:h-auto max-xl:border-b-2">
+        <aside
+          aria-label="Navigation sidebar"
+          className="w-70 shrink-0 h-full flex flex-col border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:h-auto max-lg:border-b-2"
+        >
           <Button
             onClick={builder.reset}
             className="mb-6 flex w-full items-center justify-center gap-2 rounded-md border border-(--app-border-muted) bg-(--app-accent)/5 px-4 py-3 text-sm font-medium text-(--app-text) transition hover:bg-(--app-accent)/10"
@@ -164,8 +164,8 @@ export function QueryBuilder() {
 
         {/* CENTER (ONLY SCROLL AREA) */}
         <section className="flex-1 min-w-0 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
-          <div className="border-b-2 border-(--app-border) p-6 max-xl:p-3">
-            <h2 className="text-2xl max-xl:text-xl font-bold mb-4">
+          <div className="border-b-2 border-(--app-border) p-6 max-lg:p-3">
+            <h2 className="text-2xl max-lg:text-xl font-bold mb-4">
               Active Composition
             </h2>
 
@@ -188,8 +188,8 @@ export function QueryBuilder() {
             />
           </div>
 
-          <div className="flex-1 p-6 max-xl:p-3">
-            <h2 className="mb-4 text-2xl max-xl:text-xl font-bold">
+          <div className="flex-1 p-6 max-lg:p-3">
+            <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
               Filtered Ledger
             </h2>
 
@@ -206,8 +206,11 @@ export function QueryBuilder() {
         </section>
 
         {/* RIGHT SIDEBAR */}
-        <aside className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-xl:px-4 py-6 max-xl:py-4 border-l-2 max-xl:border-l-0 border-(--app-border) max-xl:w-full max-xl:h-auto max-xl:border-t-2">
-          <h2 className="mb-2 text-2xl max-xl:text-xl font-bold">
+        <aside
+          aria-label="Query preview sidebar"
+          className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-lg:px-4 py-6 max-lg:py-4 border-l-2 max-lg:border-l-0 border-(--app-border) max-lg:w-full max-lg:h-auto max-lg:border-t-2"
+        >
+          <h2 className="mb-2 text-2xl max-lg:text-xl font-bold">
             The PathLens Ledger
           </h2>
 
@@ -249,7 +252,10 @@ export function QueryBuilder() {
             className="absolute inset-0 bg-black/20"
             onClick={closeSchemaOverlay}
           />
-          <aside className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl">
+          <aside
+            aria-label="Schema explorer overlay"
+            className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
+          >
             <div className="mb-6 flex items-center justify-between">
               <h3 className=" text-xl font-bold">Schema Explorer</h3>
               <Button

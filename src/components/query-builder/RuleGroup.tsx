@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useDragAndDrop } from "@/hooks/useDragAndDrop"
 import type { ValidationIssue } from "@/lib/validator"
 import type { Operator } from "@/types/operators"
+import { memo } from "react"
 import type {
   LogicOperator,
   QueryGroup as QueryGroupType,
@@ -17,7 +18,7 @@ import { CollapseToggle } from "./CollapseToggle"
 import { GroupLogicToggle } from "./GroupLogicToggle"
 import { Rule } from "./Rule"
 
-export function RuleGroup({
+export const RuleGroup = memo(function RuleGroup({
   group,
   fields,
   issues,
@@ -159,4 +160,4 @@ export function RuleGroup({
       </div>
     </section>
   )
-}
+})
