@@ -1,6 +1,7 @@
 "use client"
 
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 import { generateId } from "@/lib/utils"
 import type { QueryTree } from "@/types/query"
 
@@ -18,22 +19,29 @@ type HistoryState = {
   clearHistory: () => void
 }
 
-export const useHistoryStore = create<HistoryState>((set) => ({
-  items: [],
+export const useHistoryStore = create<HistoryState>()(
+  persist(
+    (set) => ({
+      items: [],
 
-  addHistory: (tree, schemaId) =>
-    set((state) => ({
-      items: [
-        {
-          id: generateId("history"),
-          name: `Run ${state.items.length + 1}`,
-          createdAt: new Date().toLocaleTimeString(),
-          schemaId,
-          tree,
-        },
-        ...state.items,
-      ].slice(0, 10),
-    })),
+      addHistory: (tree, schemaId) =>
+        set((state) => ({
+          items: [
+            {
+              id: generateId("history"),
+              name: `Run ${state.items.length + 1}`,
+              createdAt: new Date().toLocaleString(),
+              schemaId,
+              tree,
+            },
+            ...state.items,
+          ].slice(0, 10),
+        })),
 
-  clearHistory: () => set({ items: [] }),
-}))
+      clearHistory: () => set({ items: [] }),
+    }),
+    {
+      name: "pathlens-history",
+    }
+  )
+)

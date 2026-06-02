@@ -1,6 +1,5 @@
-"use client"
-
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 import { generateId } from "@/lib/utils"
 import type { QueryTree } from "@/types/query"
 
@@ -18,26 +17,33 @@ type PresetsState = {
   clearPresets: () => void
 }
 
-export const usePresetsStore = create<PresetsState>((set) => ({
-  items: [],
+export const usePresetsStore = create<PresetsState>()(
+  persist(
+    (set) => ({
+      items: [],
 
-  savePreset: (tree, schemaId, name) =>
-    set((state) => ({
-      items: [
-        {
-          id: generateId("preset"),
-          name: name || `Preset ${state.items.length + 1}`,
-          schemaId,
-          tree,
-        },
-        ...state.items,
-      ],
-    })),
+      savePreset: (tree, schemaId, name) =>
+        set((state) => ({
+          items: [
+            {
+              id: generateId("preset"),
+              name: name || `Preset ${state.items.length + 1}`,
+              schemaId,
+              tree,
+            },
+            ...state.items,
+          ],
+        })),
 
-  removePreset: (presetId) =>
-    set((state) => ({
-      items: state.items.filter((item) => item.id !== presetId),
-    })),
+      removePreset: (presetId) =>
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== presetId),
+        })),
 
-  clearPresets: () => set({ items: [] }),
-}))
+      clearPresets: () => set({ items: [] }),
+    }),
+    {
+      name: "pathlens-presets",
+    }
+  )
+)

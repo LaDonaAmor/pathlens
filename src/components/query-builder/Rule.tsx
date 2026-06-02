@@ -14,6 +14,7 @@ export function Rule({
   rule,
   fields,
   issue,
+  depth = 0,
   onFieldChange,
   onOperatorChange,
   onValueChange,
@@ -22,6 +23,7 @@ export function Rule({
   rule: QueryRule
   fields: SchemaField[]
   issue?: string
+  depth?: number
   onFieldChange: (field: string) => void
   onOperatorChange: (operator: Operator) => void
   onValueChange: (value: QueryValue) => void
@@ -29,8 +31,17 @@ export function Rule({
 }) {
   const field = fields.find((item) => item.key === rule.field) ?? fields[0]
 
+  const ruleTint =
+    depth % 3 === 0
+      ? "bg-(--app-surface)"
+      : depth % 3 === 1
+        ? "bg-(--app-surface-muted)"
+        : "bg-(--app-surface-raised)"
+
   return (
-    <div className="rounded-md border border-(--app-border-muted) bg-(--app-surface) p-4 shadow-sm">
+    <div
+      className={`rounded-md border border-(--app-border-muted) p-4 shadow-sm ${ruleTint}`}
+    >
       <div className="grid gap-2 md:grid-cols-[24px_minmax(120px,1fr)_minmax(120px,1fr)_minmax(180px,1.4fr)_40px]">
         <div className="hidden items-center text-(--app-text-muted) md:flex">
           <GripVertical size={16} />
@@ -63,7 +74,11 @@ export function Rule({
           <Trash2 size={16} />
         </Button>
       </div>
-      {issue ? <Badge variant="invalid">{issue}</Badge> : null}
+      {issue ? (
+        <div className="mt-3">
+          <Badge variant="invalid">{issue}</Badge>
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -54,13 +54,20 @@ export function RuleGroup({
 
   const groupIssue = issues.find((issue) => issue.nodeId === group.id)?.message
 
+  const groupTint =
+    depth % 3 === 0
+      ? "bg-(--app-surface-muted)"
+      : depth % 3 === 1
+        ? "bg-(--app-surface-raised)"
+        : "bg-(--app-surface)"
+
   return (
     <section
-      className={`rounded-lg border border-(--app-border) bg-(--app-surface-muted) p-3 ${
-        depth ? "ml-4" : ""
+      className={`border-2 border-(--app-border) p-4 ${groupTint} ${
+        depth ? "ml-5 border-l-4" : ""
       }`}
     >
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-5 flex flex-wrap items-center gap-3">
         <CollapseToggle
           collapsed={group.collapsed}
           onClick={() => onToggle(group.id)}
@@ -90,7 +97,7 @@ export function RuleGroup({
       ) : null}
 
       {!group.collapsed ? (
-        <div className="space-y-3">
+        <div className="space-y-5">
           {group.children.map((child, index) => (
             <div
               key={child.id}
@@ -99,6 +106,7 @@ export function RuleGroup({
             >
               {child.type === "rule" ? (
                 <Rule
+                  depth={depth}
                   rule={child}
                   fields={fields}
                   issue={

@@ -91,7 +91,7 @@ export function QueryBuilder() {
       </header>
 
       {/* MAIN 3-COLUMN LAYOUT */}
-      <div className="grid min-h-[calc(100vh-76px)] lg:grid-cols-[280px_1fr_420px]">
+      <div className="grid min-h-[calc(100vh-76px)] lg:grid-cols-[280px_1fr_380px]">
         {/* LEFT NAV */}
         <aside className="flex flex-col border-r-2 border-(--app-border) bg-(--app-surface-muted) px-4 py-10">
           <Button
@@ -148,7 +148,21 @@ export function QueryBuilder() {
         {/* CENTER CONTENT */}
         <section className="flex min-w-0 flex-col border-r-2 border-(--app-border)">
           <div className="border-b-2 border-(--app-border) p-6">
-            <h2 className="mb-4 text-2xl font-bold">Active Composition</h2>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-2xl font-bold">Active Composition</h2>
+
+              <span
+                className={
+                  isValid
+                    ? "border border-(--success) bg-(--app-surface) px-3 py-1 font-(--font-mono) text-xs uppercase tracking-[0.12em] text-(--success)"
+                    : "border border-(--error) bg-(--app-surface) px-3 py-1 font-(--font-mono) text-xs uppercase tracking-[0.12em] text-(--error)"
+                }
+              >
+                {isValid
+                  ? "Valid query"
+                  : `${builder.validationIssues.length} issue(s)`}
+              </span>
+            </div>{" "}
             <RuleGroup
               group={builder.tree}
               fields={builder.schema.fields}
@@ -182,14 +196,42 @@ export function QueryBuilder() {
         </section>
 
         {/* RIGHT PANEL */}
-        <aside className="flex flex-col bg-(--app-surface-muted) p-6">
-          <h2 className="mb-4  text-2xl font-bold">The PathLens Ledger</h2>
+        <aside className="flex flex-col bg-(--app-surface-muted) px-6 py-10">
+          <h2 className="mb-2  text-2xl font-bold">The PathLens Ledger</h2>
           <div className="flex flex-1 flex-col">
             <QueryPreview
               sqlQuery={builder.sqlQuery}
               mongoQuery={builder.mongoQuery}
               jsonQuery={builder.jsonQuery}
             />
+          </div>
+          <div className="mt-auto border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-(--app-text)">
+              Keyboard Shortcuts
+            </h3>
+
+            <dl className="space-y-2 text-xs text-(--app-text-muted)">
+              <div className="flex items-center justify-between gap-4">
+                <dt>Run query</dt>
+                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
+                  Ctrl / Cmd + Enter
+                </dd>
+              </div>
+
+              <div className="flex items-center justify-between gap-4">
+                <dt>Reset query</dt>
+                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
+                  Ctrl / Cmd + Backspace
+                </dd>
+              </div>
+
+              <div className="flex items-center justify-between gap-4">
+                <dt>Save query</dt>
+                <dd className="border border-(--app-border-muted) px-2 py-1 text-(--app-text)">
+                  Ctrl / Cmd + K
+                </dd>
+              </div>
+            </dl>
           </div>
         </aside>
       </div>
