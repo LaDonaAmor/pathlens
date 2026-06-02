@@ -65,7 +65,7 @@ export function QueryBuilder() {
   return (
     <main className="min-h-screen bg-(--app-bg) text-(--app-text)">
       {/* HEADER */}
-      <header className="flex items-center justify-between border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-4">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-4 shadow-[0_2px_0_var(--app-border)]">
         <div>
           <h1 className="flex items-center gap-2 text-5xl font-bold italic tracking-tight">
             <Image
@@ -80,7 +80,6 @@ export function QueryBuilder() {
             Build complex queries through a clearer lens.
           </p>
         </div>
-
         <Toolbar
           tree={builder.sanitizedTree}
           schemaId={builder.schemaId}

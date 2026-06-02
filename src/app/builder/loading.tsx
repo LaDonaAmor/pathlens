@@ -7,27 +7,9 @@ export default function BuilderLoading() {
           Preparing workspace
         </p>
         <div className="mt-8 flex justify-center gap-2">
-          <span
-            className="h-2 w-12 bg-(--app-accent)"
-            style={{
-              animation: "pulse 1.8s ease-in-out infinite",
-              animationDelay: "0ms",
-            }}
-          />
-          <span
-            className="h-2 w-12 bg-(--app-accent)"
-            style={{
-              animation: "pulse 1.8s ease-in-out infinite",
-              animationDelay: "300ms",
-            }}
-          />
-          <span
-            className="h-2 w-12 bg-(--app-accent)"
-            style={{
-              animation: "pulse 1.8s ease-in-out infinite",
-              animationDelay: "600ms",
-            }}
-          />
+          <span className="h-2 w-12 bg-(--app-accent) animate-[pulse_1.8s_ease-in-out_infinite] [animation-delay:0ms]" />
+          <span className="h-2 w-12 bg-(--app-accent) animate-[pulse_1.8s_ease-in-out_infinite] [animation-delay:300ms]" />
+          <span className="h-2 w-12 bg-(--app-accent) animate-[pulse_1.8s_ease-in-out_infinite] [animation-delay:600ms]" />
         </div>
       </div>
     </main>

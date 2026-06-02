@@ -54,12 +54,19 @@ export function RuleGroup({
 
   const groupIssue = issues.find((issue) => issue.nodeId === group.id)?.message
 
-  const groupTint =
-    depth % 3 === 0
-      ? "bg-(--app-surface-muted)"
-      : depth % 3 === 1
-        ? "bg-(--app-surface-raised)"
-        : "bg-(--app-surface)"
+  const groupTints = [
+    "bg-(--group-tint-1)",
+    "bg-(--group-tint-2)",
+    "bg-(--group-tint-3)",
+    "bg-(--group-tint-4)",
+    "bg-(--group-tint-5)",
+  ]
+
+  const groupTint = groupTints[getTintIndex(group.id)]
+
+  function getTintIndex(id: string) {
+    return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
+  }
 
   return (
     <section

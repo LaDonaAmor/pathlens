@@ -10,11 +10,14 @@ import { OperatorSelector } from "./OperatorSelector"
 import { ValueInput } from "./ValueInput"
 import { Badge } from "@/components/ui/badge"
 
+function getTintIndex(id: string) {
+  return [...id].reduce((total, char) => total + char.charCodeAt(0), 0) % 5
+}
+
 export function Rule({
   rule,
   fields,
   issue,
-  depth = 0,
   onFieldChange,
   onOperatorChange,
   onValueChange,
@@ -31,12 +34,15 @@ export function Rule({
 }) {
   const field = fields.find((item) => item.key === rule.field) ?? fields[0]
 
-  const ruleTint =
-    depth % 3 === 0
-      ? "bg-(--app-surface)"
-      : depth % 3 === 1
-        ? "bg-(--app-surface-muted)"
-        : "bg-(--app-surface-raised)"
+  const ruleTints = [
+    "bg-(--rule-tint-1)",
+    "bg-(--rule-tint-2)",
+    "bg-(--rule-tint-3)",
+    "bg-(--rule-tint-4)",
+    "bg-(--rule-tint-5)",
+  ]
+
+  const ruleTint = ruleTints[getTintIndex(rule.id)]
 
   return (
     <div

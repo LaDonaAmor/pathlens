@@ -26,6 +26,18 @@
   --syntax-param: #b0ceb7;
   --error: #93000a;
   --success: #163020;
+
+  --group-tint-1: #fffaf3;
+  --group-tint-2: #f7eadc;
+  --group-tint-3: #edf0df;
+  --group-tint-4: #f3e4d2;
+  --group-tint-5: #efe6d8;
+
+  --rule-tint-1: #fcfaf7;
+  --rule-tint-2: #f5ecdf;
+  --rule-tint-3: #eef3e8;
+  --rule-tint-4: #f8ead8;
+  --rule-tint-5: #f0e7dd;
 }
 
 [data-theme="dark"]:root {
@@ -51,6 +63,18 @@
   --syntax-text: #f2dfd3;
   --error: #ffb4ab;
   --success: #b0ceb7;
+
+  --group-tint-1: #231a13;
+  --group-tint-2: #2b1d14;
+  --group-tint-3: #243023;
+  --group-tint-4: #332417;
+  --group-tint-5: #2a211b;
+
+  --rule-tint-1: #1f1711;
+  --rule-tint-2: #2a1b12;
+  --rule-tint-3: #202b21;
+  --rule-tint-4: #302015;
+  --rule-tint-5: #271f19;
 
   color-scheme: dark;
 }

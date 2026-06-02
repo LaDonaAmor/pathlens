@@ -19,6 +19,27 @@ type HistoryState = {
   clearHistory: () => void
 }
 
+function getQueryName(tree: QueryTree, fallback: string) {
+  const firstRule = tree.children.find((child) => child.type === "rule")
+
+  if (firstRule?.type === "rule") {
+    return `${firstRule.field} ${firstRule.operator} ${String(firstRule.value || "value")}`
+  }
+
+  const groupCount = tree.children.filter(
+    (child) => child.type === "group"
+  ).length
+  const ruleCount = tree.children.filter(
+    (child) => child.type === "rule"
+  ).length
+
+  if (ruleCount || groupCount) {
+    return `${tree.logic} query: ${ruleCount} rule${ruleCount === 1 ? "" : "s"}, ${groupCount} group${groupCount === 1 ? "" : "s"}`
+  }
+
+  return fallback
+}
+
 export const useHistoryStore = create<HistoryState>()(
   persist(
     (set) => ({
@@ -29,7 +50,7 @@ export const useHistoryStore = create<HistoryState>()(
           items: [
             {
               id: generateId("history"),
-              name: `Run ${state.items.length + 1}`,
+              name: getQueryName(tree, `Run ${state.items.length + 1}`),
               createdAt: new Date().toLocaleString(),
               schemaId,
               tree,
