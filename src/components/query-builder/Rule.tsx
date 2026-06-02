@@ -9,7 +9,6 @@ import { FieldSelector } from "./FieldSelector"
 import { OperatorSelector } from "./OperatorSelector"
 import { ValueInput } from "./ValueInput"
 import { Badge } from "@/components/ui/badge"
-import { Badge } from "@/components/ui/badge"
 
 export function Rule({
   rule,
@@ -33,7 +32,6 @@ export function Rule({
   return (
     <div className="rounded-md border border-(--app-border-muted) bg-(--app-surface) p-4 shadow-sm">
       <div className="grid gap-2 md:grid-cols-[24px_minmax(120px,1fr)_minmax(120px,1fr)_minmax(180px,1.4fr)_40px]">
-        <div className="hidden items-center text-(--app-text-muted) md:flex">
         <div className="hidden items-center text-(--app-text-muted) md:flex">
           <GripVertical size={16} />
         </div>
@@ -60,13 +58,11 @@ export function Rule({
         <Button
           onClick={onRemove}
           className="h-9 w-9 px-0 text-(--error)"
-          className="h-9 w-9 px-0 text-(--error)"
           aria-label="Remove rule"
         >
           <Trash2 size={16} />
         </Button>
       </div>
-      {issue ? <Badge variant="invalid">{issue}</Badge> : null}
       {issue ? <Badge variant="invalid">{issue}</Badge> : null}
     </div>
   )
