@@ -78,7 +78,7 @@ export function QueryBuilder() {
   }
 
   return (
-    <main className="h-screen overflow-hidden max-lg:overflow-auto max-lg:min-h-screen bg-(--app-bg) text-(--app-text)">
+    <main className="h-screen lg:flex lg:flex-col overflow-hidden max-lg:overflow-auto max-lg:min-h-screen bg-(--app-bg) text-(--app-text)">
       {/* HEADER */}
       <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-6 shadow-[0_2px_0_var(--app-accent)]">
         <div>
@@ -109,7 +109,7 @@ export function QueryBuilder() {
       </header>
 
       {/* APP SHELL */}
-      <div className="flex h-[calc(100vh-76px)] overflow-hidden max-lg:flex-col max-lg:h-auto">
+      <div className="flex lg:flex-1 min-h-0 overflow-hidden max-lg:flex-col max-lg:h-auto">
         {/* LEFT SIDEBAR */}
         <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:h-auto max-lg:border-b-2">
           <Button
