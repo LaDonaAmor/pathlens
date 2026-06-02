@@ -49,11 +49,6 @@ export function useQueryBuilder() {
     [sanitizedTree]
   )
 
-  const result = useMemo(
-    () => executeQuery(dataset, sanitizedTree),
-    [dataset, sanitizedTree]
-  )
-
   return {
     ...store,
     schema,
@@ -63,6 +58,5 @@ export function useQueryBuilder() {
     sqlQuery,
     mongoQuery,
     jsonQuery,
-    result,
   }
 }
