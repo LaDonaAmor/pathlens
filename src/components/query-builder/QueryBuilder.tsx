@@ -22,10 +22,7 @@ import { useUiStore, type NavItem } from "@/store/uiStore"
 
 export function QueryBuilder() {
   const [running, setRunning] = useState(false)
-  const [executionStampKey, setExecutionStampKey] = useState(0)
-
   const builder = useQueryBuilder()
-
   const activeNavItem = useUiStore((state) => state.activeNavItem)
   const setActiveNavItem = useUiStore((state) => state.setActiveNavItem)
   const schemaOverlayOpen = useUiStore((state) => state.schemaOverlayOpen)
@@ -34,13 +31,15 @@ export function QueryBuilder() {
   const addHistory = useHistoryStore((state) => state.addHistory)
   const savePreset = usePresetsStore((state) => state.savePreset)
 
+  const [executionStampKey, setExecutionStampKey] = useState(0)
+
   const addRuleWithField = useQueryStore((state) => state.addRuleWithField)
 
   const isValid = builder.validationIssues.length === 0
 
   function runQuery() {
     if (!isValid) return
-    setExecutionStampKey((k) => k + 1)
+    setExecutionStampKey((key) => key + 1)
     setRunning(true)
     window.setTimeout(() => setRunning(false), 350)
   }
@@ -89,6 +88,7 @@ export function QueryBuilder() {
               alt="PathLens logo"
               width={50}
               height={50}
+              className="max-xl:w-8 max-xl:h-8"
             />
             PathLens
           </h1>
@@ -96,7 +96,6 @@ export function QueryBuilder() {
             Build complex queries through a clearer lens.
           </p>
         </div>
-
         <Toolbar
           tree={builder.sanitizedTree}
           schemaId={builder.schemaId}
@@ -111,24 +110,23 @@ export function QueryBuilder() {
 
       {/* APP SHELL */}
       <div className="flex h-[calc(100vh-76px)] overflow-hidden max-xl:flex-col max-xl:h-auto">
-        {/* LEFT */}
-        <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 border-(--app-border) bg-(--app-surface-muted) px-4 py-10">
+        {/* LEFT SIDEBAR */}
+        <aside className="w-70 shrink-0 h-full flex flex-col border-r-2 max-xl:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-xl:px-3 py-10 max-xl:py-4 max-xl:w-full max-xl:h-auto max-xl:border-b-2">
           <Button
             onClick={builder.reset}
-            className="mb-6 flex w-full items-center gap-2"
+            className="mb-6 flex w-full items-center justify-center gap-2 rounded-md border border-(--app-border-muted) bg-(--app-accent)/5 px-4 py-3 text-sm font-medium text-(--app-text) transition hover:bg-(--app-accent)/10"
           >
             <Plus size={18} />
             NEW QUERY
           </Button>
-
           <nav className="flex flex-col gap-3">
             <Button
               onClick={() => handleNavClick("schema")}
-              className={`flex items-center gap-3 border-2 px-4 py-4 text-xs uppercase tracking-wider ${
+              className={
                 activeNavItem === "schema"
-                  ? "border-(--app-accent) bg-(--app-accent) text-(--app-on-accent)"
-                  : "border-transparent text-(--app-text-muted)"
-              }`}
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
             >
               <Folder size={16} />
               SCHEMA EXPLORER
@@ -136,11 +134,11 @@ export function QueryBuilder() {
 
             <Button
               onClick={() => handleNavClick("presets")}
-              className={`flex items-center gap-3 border-2 px-4 py-4 text-xs uppercase tracking-wider ${
+              className={
                 activeNavItem === "presets"
-                  ? "border-(--app-accent) bg-(--app-accent) text-(--app-on-accent)"
-                  : "border-transparent text-(--app-text-muted)"
-              }`}
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
             >
               <Bookmark size={16} />
               PRESETS
@@ -148,27 +146,28 @@ export function QueryBuilder() {
 
             <Button
               onClick={() => handleNavClick("history")}
-              className={`flex items-center gap-3 border-2 px-4 py-4 text-xs uppercase tracking-wider ${
+              className={
                 activeNavItem === "history"
-                  ? "border-(--app-accent) bg-(--app-accent) text-(--app-on-accent)"
-                  : "border-transparent text-(--app-text-muted)"
-              }`}
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
             >
               <History size={16} />
               HISTORY
             </Button>
           </nav>
-
           <div className="mt-6 space-y-4 overflow-auto">
             {activeNavItem === "presets" && <SavedPresets />}
             {activeNavItem === "history" && <QueryHistory />}
           </div>
         </aside>
 
-        {/* CENTER */}
-        <section className="flex-1 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
-          <div className="border-b-2 p-6">
-            <h2 className="text-2xl font-bold mb-4">Active Composition</h2>
+        {/* CENTER (ONLY SCROLL AREA) */}
+        <section className="flex-1 min-w-0 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
+          <div className="border-b-2 border-(--app-border) p-6 max-xl:p-3">
+            <h2 className="text-2xl max-xl:text-xl font-bold mb-4">
+              Active Composition
+            </h2>
 
             <RuleGroup
               group={builder.tree}
@@ -189,8 +188,10 @@ export function QueryBuilder() {
             />
           </div>
 
-          <div className="flex-1 p-6">
-            <h2 className="mb-4 text-2xl font-bold">Filtered Ledger</h2>
+          <div className="flex-1 p-6 max-xl:p-3">
+            <h2 className="mb-4 text-2xl max-xl:text-xl font-bold">
+              Filtered Ledger
+            </h2>
 
             {running ? (
               <LoadingState />
@@ -204,15 +205,40 @@ export function QueryBuilder() {
           </div>
         </section>
 
-        {/* RIGHT */}
-        <aside className="w-90 flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 py-6 border-l-2">
-          <h2 className="mb-2 text-2xl font-bold">The PathLens Ledger</h2>
+        {/* RIGHT SIDEBAR */}
+        <aside className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-xl:px-4 py-6 max-xl:py-4 border-l-2 max-xl:border-l-0 border-(--app-border) max-xl:w-full max-xl:h-auto max-xl:border-t-2">
+          <h2 className="mb-2 text-2xl max-xl:text-xl font-bold">
+            The PathLens Ledger
+          </h2>
 
           <QueryPreview
             sqlQuery={builder.sqlQuery}
             mongoQuery={builder.mongoQuery}
             jsonQuery={builder.jsonQuery}
           />
+
+          <div className="mt-6 border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em]">
+              Keyboard Shortcuts
+            </h3>
+
+            <dl className="space-y-2 text-xs">
+              <div className="flex justify-between">
+                <dt>Run</dt>
+                <dd>Ctrl + Enter</dd>
+              </div>
+
+              <div className="flex justify-between">
+                <dt>Reset</dt>
+                <dd>Ctrl + Backspace</dd>
+              </div>
+
+              <div className="flex justify-between">
+                <dt>Save</dt>
+                <dd>Ctrl + K</dd>
+              </div>
+            </dl>
+          </div>
         </aside>
       </div>
 
@@ -223,20 +249,20 @@ export function QueryBuilder() {
             className="absolute inset-0 bg-black/20"
             onClick={closeSchemaOverlay}
           />
-
-          <aside className="absolute left-70 top-0 h-full w-95 bg-(--app-surface) p-6">
-            <div className="flex justify-between mb-6">
-              <h3 className="text-xl font-bold">Schema Explorer</h3>
-              <Button onClick={closeSchemaOverlay}>
+          <aside className="absolute left-70 max-md:left-0 top-0 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className=" text-xl font-bold">Schema Explorer</h3>
+              <Button
+                onClick={() => setSchemaOverlayOpen(false)}
+                className="rounded-md p-2 text-(--app-text-muted) transition hover:bg-(--app-surface-muted)"
+              >
                 <X size={20} />
               </Button>
             </div>
-
             <SchemaSelector
               value={builder.schemaId}
               onChange={builder.setSchema}
             />
-
             <SchemaPreview
               schema={builder.schema}
               onAddRule={(fieldKey) => {
