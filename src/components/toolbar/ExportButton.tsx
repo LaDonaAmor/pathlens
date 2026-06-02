@@ -44,7 +44,7 @@ export function ExportButton({
   return (
     <Button onClick={handleExport} className={toolbarLabelClass}>
       <Download size={16} />
-      Export
+      <span className="max-xl:sr-only">Export</span>
     </Button>
   )
 }

@@ -70,14 +70,14 @@ export function RuleGroup({
 
   return (
     <section
-      className={`relative border-2 border-(--app-border) p-4 ${groupTint} ${
-        depth ? "ml-6 border-l-4" : ""
+      className={`relative border-2 border-(--app-border) p-4 max-lg:p-3 ${groupTint} ${
+        depth ? "ml-6 max-lg:ml-3 border-l-4 max-lg:border-l-2" : ""
       }`}
     >
       <div className="absolute bottom-4 left-3 top-4 w-px bg-(--app-border-muted)" />
       <div className="absolute left-2.25 top-6 size-2 border border-(--app-border) bg-(--app-accent)" />
 
-      <div className="relative pl-5">
+      <div className="relative pl-5 max-lg:pl-3">
         <div className="mb-5 flex flex-wrap items-center gap-3">
           <CollapseToggle
             collapsed={group.collapsed}
@@ -110,12 +110,12 @@ export function RuleGroup({
         ) : null}
 
         {!group.collapsed ? (
-          <div className="space-y-5">
+          <div className="space-y-5 max-lg:space-y-3">
             {group.children.map((child, index) => (
               <div
                 key={child.id}
                 {...dnd.getDragProps(index)}
-                className={`relative pl-5 ${
+                className={`relative cursor-pointer pl-5 ${
                   dnd.dragIndex === index ? "opacity-50" : ""
                 }`}
               >

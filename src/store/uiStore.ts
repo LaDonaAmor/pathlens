@@ -1,6 +1,7 @@
 "use client"
 
 import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
 export type ThemeMode = "light" | "dark"
 export type PreviewMode = "sql" | "mongo" | "json"
@@ -21,32 +22,39 @@ type UiState = {
   setSchemaOverlayOpen: (open: boolean) => void
 }
 
-export const useUiStore = create<UiState>((set) => ({
-  theme: "light",
-  previewMode: "sql",
-  leftPanelOpen: true,
-  rightPanelOpen: true,
-  activeNavItem: null,
-  schemaOverlayOpen: false,
+export const useUiStore = create<UiState>()(
+  persist(
+    (set) => ({
+      theme: "light",
+      previewMode: "sql",
+      leftPanelOpen: true,
+      rightPanelOpen: true,
+      activeNavItem: null,
+      schemaOverlayOpen: false,
 
-  setPreviewMode: (previewMode) => set({ previewMode }),
+      setPreviewMode: (previewMode) => set({ previewMode }),
 
-  toggleTheme: () =>
-    set((state) => ({
-      theme: state.theme === "light" ? "dark" : "light",
-    })),
+      toggleTheme: () =>
+        set((state) => ({
+          theme: state.theme === "light" ? "dark" : "light",
+        })),
 
-  toggleLeftPanel: () =>
-    set((state) => ({
-      leftPanelOpen: !state.leftPanelOpen,
-    })),
+      toggleLeftPanel: () =>
+        set((state) => ({
+          leftPanelOpen: !state.leftPanelOpen,
+        })),
 
-  toggleRightPanel: () =>
-    set((state) => ({
-      rightPanelOpen: !state.rightPanelOpen,
-    })),
+      toggleRightPanel: () =>
+        set((state) => ({
+          rightPanelOpen: !state.rightPanelOpen,
+        })),
 
-  setActiveNavItem: (activeNavItem) => set({ activeNavItem }),
+      setActiveNavItem: (activeNavItem) => set({ activeNavItem }),
 
-  setSchemaOverlayOpen: (schemaOverlayOpen) => set({ schemaOverlayOpen }),
-}))
+      setSchemaOverlayOpen: (schemaOverlayOpen) => set({ schemaOverlayOpen }),
+    }),
+    {
+      name: "pathlens-ui",
+    }
+  )
+)

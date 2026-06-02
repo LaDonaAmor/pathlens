@@ -13,7 +13,9 @@ export function ThemeToggle() {
   return (
     <Button onClick={toggleTheme} className={toolbarBtn}>
       <Icon size={16} />
-      {theme === "dark" ? "Light" : "Dark"}
+      <span className="max-xl:sr-only">
+        {theme === "dark" ? "Light" : "Dark"}
+      </span>
     </Button>
   )
 }
