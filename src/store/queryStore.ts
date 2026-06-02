@@ -200,16 +200,15 @@ export const useQueryStore = create<QueryStoreState>()(
         set((state) => ({
           tree: updateNode(state.tree, ruleId, (node) => {
             if (node.type !== "rule") return node
-
-            if (
-              operator === "isNull" ||
-              operator === "isNotNull" ||
-              operator === "between"
-            ) {
+            if (operator === "isNull" || operator === "isNotNull") {
               return { ...node, operator, value: null }
             }
-
-            return { ...node, operator, value: null }
+            if (operator === "between") {
+              const field = getSchemaField(state.schemaId, node.field)
+              const defaultVal = field.type === "date" ? ["", ""] : [0, 0]
+              return { ...node, operator, value: defaultVal }
+            }
+            return { ...node, operator }
           }) as QueryTree,
         })),
 

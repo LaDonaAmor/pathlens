@@ -10,7 +10,7 @@ describe("useDragAndDrop", () => {
     const dragPropsTo = result.current.getDragProps(2)
 
     act(() => {
-      dragPropsFrom.onDragStart({} as React.DragEvent)
+      dragPropsFrom.onDragStart()
     })
     act(() => {
       dragPropsTo.onDrop({
@@ -27,7 +27,7 @@ describe("useDragAndDrop", () => {
     const dragProps = result.current.getDragProps(1)
 
     act(() => {
-      dragProps.onDragStart({} as React.DragEvent)
+      dragProps.onDragStart()
     })
     act(() => {
       dragProps.onDrop({
@@ -42,7 +42,7 @@ describe("useDragAndDrop", () => {
     const { result } = renderHook(() => useDragAndDrop(vi.fn()))
 
     act(() => {
-      result.current.getDragProps(0).onDragStart({} as React.DragEvent)
+      result.current.getDragProps(0).onDragStart()
     })
     expect(result.current.dragIndex).toBe(0)
 
