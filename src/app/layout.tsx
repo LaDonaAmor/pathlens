@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { EB_Garamond, JetBrains_Mono } from "next/font/google"
 import { ThemeProvider } from "@/providers/ThemeProvider"
+import { PreloaderGate } from "@/components/preloader/PreloaderGate"
 import "./globals.css"
 
 const serif = EB_Garamond({
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${serif.variable} ${mono.variable}`}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <PreloaderGate minDuration={1200}>{children}</PreloaderGate>
+        </ThemeProvider>
       </body>
     </html>
   )
