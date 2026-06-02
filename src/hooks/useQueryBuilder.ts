@@ -8,7 +8,6 @@ import {
   generateSqlQuery,
   generateJsonQuery,
 } from "@/lib/queryEngine"
-import { executeQuery } from "@/lib/queryExecutor"
 import { sanitizeQueryTree } from "@/lib/sanitizer"
 import { validateQueryTree } from "@/lib/validator"
 import { useQueryStore } from "@/store/queryStore"
