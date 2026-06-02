@@ -111,7 +111,7 @@ export function QueryBuilder() {
         {/* LEFT SIDEBAR */}
         <aside
           aria-label="Navigation sidebar"
-          className="w-70 shrink-0 h-full flex flex-col border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:h-auto max-lg:border-b-2"
+          className="w-70 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
         >
           <Button
             onClick={builder.reset}
@@ -289,7 +289,7 @@ export function QueryBuilder() {
               }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               aria-label="Schema explorer overlay"
-              className="fixed left-70 max-md:left-0 top-0 z-40 flex h-full w-95 max-md:w-full flex-col border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
+              className="fixed left-70 max-md:left-0 top-0 z-40 flex h-full w-95 max-md:w-full flex-col overflow-y-auto border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
             >
               <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-xl font-bold">Schema Explorer</h3>
