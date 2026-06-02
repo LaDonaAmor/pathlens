@@ -4,6 +4,7 @@ import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { exportQuery } from "@/lib/importExport"
 import type { QueryTree } from "@/types/query"
+import { toolbarLabelClass } from "./ImportButton"
 
 export function ExportButton({ tree }: { tree: QueryTree }) {
   function handleExport() {
@@ -19,7 +20,7 @@ export function ExportButton({ tree }: { tree: QueryTree }) {
   }
 
   return (
-    <Button onClick={handleExport}>
+    <Button onClick={handleExport} className={toolbarLabelClass}>
       <Download size={16} />
       Export
     </Button>

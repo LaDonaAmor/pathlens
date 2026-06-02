@@ -26,9 +26,6 @@
   --syntax-param: #b0ceb7;
   --error: #93000a;
   --success: #163020;
-
-  --font-serif: "EB Garamond", Georgia, serif;
-  --font-mono: "JetBrains Mono", monospace;
 }
 
 [data-theme="dark"]:root {
@@ -66,17 +63,11 @@ html {
   scroll-behavior: smooth;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
-  background: var(--color-background);
-  color: var(--color-foreground);
-  background: var(--color-background);
-  color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--font-serif);
 }
 
 button,
