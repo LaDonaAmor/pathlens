@@ -60,8 +60,8 @@ export const RuleGroup = memo(function RuleGroup({
 
   return (
     <section
-      className={`relative border-2 border-(--app-border) p-4 max-lg:p-3 ${groupTint} ${
-        depth ? "ml-6 max-lg:ml-3 border-l-4 max-lg:border-l-2" : ""
+      className={`relative border-2 border-(--app-border) p-4 max-lg:p-3 min-w-0 ${groupTint} ${
+        depth ? "ml-4 max-lg:ml-2 border-l-4 max-lg:border-l-2" : ""
       }`}
     >
       <div className="absolute bottom-4 left-3 top-4 w-px bg-(--app-border-muted)" />
@@ -100,11 +100,11 @@ export const RuleGroup = memo(function RuleGroup({
         ) : null}
 
         {!group.collapsed ? (
-          <div className="space-y-5 max-lg:space-y-3 animate-group-expand">
+          <div className="space-y-5 max-lg:space-y-3 animate-group-expand min-w-0 w-full">
             {group.children.map((child, index) => (
               <div
                 key={child.id}
-                className={`relative cursor-pointer pl-5 animate-rule-enter ${
+                className={`relative cursor-pointer pl-5 min-w-0 w-full animate-rule-enter ${
                   dnd.dragIndex === index
                     ? "opacity-50 animate-dnd-highlight"
                     : ""
