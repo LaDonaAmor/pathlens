@@ -36,7 +36,7 @@ export function QueryPreview({
               className={
                 mode === item
                   ? "rounded-none border-0 border-b-2 border-(--app-accent) bg-transparent px-4 py-2 font-(--font-mono) text-xs uppercase tracking-wider text-(--syntax-text) hover:bg-transparent hover:text-(--syntax-text) focus:outline-none focus-visible:outline-none"
-                  : "rounded-none border-0 bg-transparent px-4 py-2 font-(--font-mono) text-xs uppercase tracking-wider text-(--syntax-text)/50 transition hover:bg-transparent hover:text-(--syntax-text)/80 focus:outline-none focus-visible:outline-none"
+                  : "rounded-none border-0 bg-transparent px-3 py-1 font-(--font-mono) text-xs uppercase tracking-wider text-(--syntax-text)/50 transition hover:bg-transparent hover:text-(--syntax-text)/80 focus:outline-none focus-visible:outline-none"
               }
             >
               {item}

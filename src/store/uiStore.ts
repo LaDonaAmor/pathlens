@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware"
 
 export type ThemeMode = "light" | "dark"
 export type PreviewMode = "sql" | "mongo" | "json"
-export type NavItem = "schema" | "presets" | "history"
+export type NavItem = "schema" | "presets" | "history" | "preview"
 
 type UiState = {
   theme: ThemeMode

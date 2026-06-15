@@ -111,7 +111,7 @@ export function QueryBuilder() {
         {/* LEFT SIDEBAR */}
         <aside
           aria-label="Navigation sidebar"
-          className="w-70 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
+          className="w-80 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
         >
           <Button
             onClick={builder.reset}
@@ -184,56 +184,7 @@ export function QueryBuilder() {
               </motion.div>
             )}
           </AnimatePresence>
-        </aside>
 
-        {/* CENTER (ONLY SCROLL AREA) */}
-        <section className="flex-1 min-w-0 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
-          <div className="border-b-2 border-(--app-border) p-6 max-lg:p-3">
-            <h2 className="text-2xl max-lg:text-xl font-bold mb-4">
-              Active Composition
-            </h2>
-
-            <RuleGroup
-              group={builder.tree}
-              fields={builder.schema.fields}
-              issues={builder.validationIssues}
-              isRoot
-              onAddRule={builder.addRule}
-              onAddGroup={builder.addGroup}
-              onRemove={builder.removeNode}
-              onToggle={builder.toggleGroup}
-              onLogicChange={builder.setGroupLogic}
-              onFieldChange={builder.setRuleField}
-              onOperatorChange={builder.setRuleOperator}
-              onValueChange={(ruleId, value) =>
-                builder.updateRule(ruleId, { value })
-              }
-              onReorder={builder.reorderChild}
-            />
-          </div>
-
-          <div className="flex-1 p-6 max-lg:p-3">
-            <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
-              Filtered Ledger
-            </h2>
-
-            {running ? (
-              <LoadingState />
-            ) : (
-              <ResultsPanel
-                data={builder.dataset}
-                tree={builder.sanitizedTree}
-                stampKey={executionStampKey}
-              />
-            )}
-          </div>
-        </section>
-
-        {/* RIGHT SIDEBAR */}
-        <aside
-          aria-label="Query preview sidebar"
-          className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-lg:px-4 py-6 max-lg:py-4 border-l-2 max-lg:border-l-0 border-(--app-border) max-lg:w-full max-lg:h-auto max-lg:border-t-2"
-        >
           <h2 className="mb-2 text-2xl max-lg:text-xl font-bold">
             The PathLens Ledger
           </h2>
@@ -267,6 +218,49 @@ export function QueryBuilder() {
             </dl>
           </div>
         </aside>
+
+        {/* CENTER (ONLY SCROLL AREA) */}
+        <section className="flex-1 min-w-0 flex flex-col overflow-hidden border-r-2 max-lg:border-r-0 border-(--app-border)">
+          <div className="flex-1 min-h-0 overflow-y-auto border-b-2 border-(--app-border) p-6 max-lg:p-3">
+            <h2 className="text-2xl max-lg:text-xl font-bold mb-4">
+              Active Composition
+            </h2>
+
+            <RuleGroup
+              group={builder.tree}
+              fields={builder.schema.fields}
+              issues={builder.validationIssues}
+              isRoot
+              onAddRule={builder.addRule}
+              onAddGroup={builder.addGroup}
+              onRemove={builder.removeNode}
+              onToggle={builder.toggleGroup}
+              onLogicChange={builder.setGroupLogic}
+              onFieldChange={builder.setRuleField}
+              onOperatorChange={builder.setRuleOperator}
+              onValueChange={(ruleId, value) =>
+                builder.updateRule(ruleId, { value })
+              }
+              onReorder={builder.reorderChild}
+            />
+          </div>
+
+          <div className="flex-1 min-h-0 overflow-y-auto p-6 max-lg:p-3">
+            <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
+              Filtered Ledger
+            </h2>
+
+            {running ? (
+              <LoadingState />
+            ) : (
+              <ResultsPanel
+                data={builder.dataset}
+                tree={builder.sanitizedTree}
+                stampKey={executionStampKey}
+              />
+            )}
+          </div>
+        </section>
       </div>
 
       <AnimatePresence>
