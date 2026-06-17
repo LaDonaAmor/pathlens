@@ -22,16 +22,16 @@ export function ResultsTable({
   }
 
   return (
-    <div className="overflow-auto border-2 border-(--app-border)">
+    <div className="border-2 border-(--app-border)">
       <table className="min-w-full border-collapse text-center font-(--font-mono) text-sm leading-6">
-        <thead className="bg-(--app-surface-raised) text-xs uppercase tracking-[0.12em] text-(--app-text)">
-          <tr>
+        <thead className="sticky top-0 z-10 bg-(--app-surface-raised) text-center text-xs uppercase tracking-[0.12em] text-(--app-text)">
+          <tr className="bg-(--app-surface-raised) shadow-[0_2px_4px_rgba(0,0,0,0.12)]">
             {columns.map((column) => {
               const isActive = sort?.field === column
               return (
                 <th
                   key={column}
-                  className="border-b-2 border-(--app-border) px-4 py-3 align-middle"
+                  className="border-b-2 border-(--app-border) bg-(--app-surface-raised) px-4 py-3 align-middle"
                 >
                   <Button
                     type="button"

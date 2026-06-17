@@ -12,7 +12,7 @@ export function SavedPresets() {
 
   return (
     <section className="space-y-2">
-      <h2 className="text-lg font-semibold text-(--app-text)">Presets</h2>
+      <h2 className="text-lg mt-4 font-semibold text-(--app-text)">Presets</h2>
       {items.length ? (
         items.map((item) => (
           <PresetItem

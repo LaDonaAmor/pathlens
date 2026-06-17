@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button"
 import Image from "next/image"
-import { Folder, Bookmark, History, Plus, X } from "lucide-react"
+import { Folder, Bookmark, History, Plus, X, FileText } from "lucide-react"
 import { useQueryStore } from "@/store/queryStore"
 import { QueryHistory } from "@/components/history/QueryHistory"
 import { SavedPresets } from "@/components/history/SavedPresets"
@@ -111,7 +111,7 @@ export function QueryBuilder() {
         {/* LEFT SIDEBAR */}
         <aside
           aria-label="Navigation sidebar"
-          className="w-80 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
+          className="w-90 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
         >
           <Button
             onClick={builder.reset}
@@ -156,6 +156,18 @@ export function QueryBuilder() {
               <History size={16} />
               HISTORY
             </Button>
+
+            <Button
+              onClick={() => handleNavClick("preview")}
+              className={
+                activeNavItem === "preview"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
+            >
+              <FileText size={16} />
+              LEDGER
+            </Button>
           </nav>
           <AnimatePresence mode="wait">
             {activeNavItem === "presets" && (
@@ -185,15 +197,26 @@ export function QueryBuilder() {
             )}
           </AnimatePresence>
 
-          <h2 className="mb-2 text-2xl max-lg:text-xl font-bold">
-            The PathLens Ledger
-          </h2>
-
-          <QueryPreview
-            sqlQuery={builder.sqlQuery}
-            mongoQuery={builder.mongoQuery}
-            jsonQuery={builder.jsonQuery}
-          />
+          <AnimatePresence mode="wait">
+            {activeNavItem === "preview" && (
+              <motion.div
+                key="preview"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15 }}
+              >
+                <h2 className="mb-2 mt-5 text-2xl max-lg:text-xl font-bold">
+                  The PathLens Ledger
+                </h2>
+                <QueryPreview
+                  sqlQuery={builder.sqlQuery}
+                  mongoQuery={builder.mongoQuery}
+                  jsonQuery={builder.jsonQuery}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="mt-6 border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em]">
