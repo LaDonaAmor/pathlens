@@ -35,7 +35,7 @@ export const Rule = memo(function Rule({
 
   return (
     <div
-      className={`rounded-md border border-(--app-border-muted) p-4 max-lg:p-3 shadow-sm ${ruleTint}`}
+      className={`rounded-md border border-(--app-border-muted) p-3 max-lg:p-3 shadow-sm md:flex-nowrap ${ruleTint}`}
     >
       <div className="flex flex-wrap items-center gap-2">
         <div className="hidden shrink-0 items-center text-(--app-text-muted) md:flex">

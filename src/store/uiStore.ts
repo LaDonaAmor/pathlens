@@ -5,7 +5,8 @@ import { persist } from "zustand/middleware"
 
 export type ThemeMode = "light" | "dark"
 export type PreviewMode = "sql" | "mongo" | "json"
-export type NavItem = "schema" | "presets" | "history" | "preview"
+export type NavItem = "schema" | "presets" | "history"
+export type CenterTab = "builder" | "ledger"
 
 type UiState = {
   theme: ThemeMode
@@ -14,6 +15,8 @@ type UiState = {
   rightPanelOpen: boolean
   activeNavItem: NavItem | null
   schemaOverlayOpen: boolean
+  centerTab: CenterTab
+  setCenterTab: (tab: CenterTab) => void
   setPreviewMode: (mode: PreviewMode) => void
   toggleTheme: () => void
   toggleLeftPanel: () => void
@@ -31,6 +34,10 @@ export const useUiStore = create<UiState>()(
       rightPanelOpen: true,
       activeNavItem: null,
       schemaOverlayOpen: false,
+
+      centerTab: "builder" as CenterTab,
+
+      setCenterTab: (centerTab) => set({ centerTab }),
 
       setPreviewMode: (previewMode) => set({ previewMode }),
 
