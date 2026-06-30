@@ -4,7 +4,15 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button"
 import Image from "next/image"
-import { Folder, Bookmark, History, Plus, X } from "lucide-react"
+import {
+  Folder,
+  Bookmark,
+  History,
+  Plus,
+  X,
+  FileText,
+  Code2,
+} from "lucide-react"
 import { useQueryStore } from "@/store/queryStore"
 import { QueryHistory } from "@/components/history/QueryHistory"
 import { SavedPresets } from "@/components/history/SavedPresets"
@@ -37,6 +45,9 @@ export function QueryBuilder() {
   const addRuleWithField = useQueryStore((state) => state.addRuleWithField)
 
   const isValid = builder.validationIssues.length === 0
+
+  const centerTab = useUiStore((state) => state.centerTab)
+  const setCenterTab = useUiStore((state) => state.setCenterTab)
 
   function runQuery() {
     if (!isValid) return
@@ -81,14 +92,14 @@ export function QueryBuilder() {
   return (
     <main className="h-screen lg:flex lg:flex-col overflow-hidden max-lg:overflow-auto max-lg:min-h-screen bg-(--app-bg) text-(--app-text)">
       {/* HEADER */}
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b-2 border-(--app-border) bg-(--app-surface) px-6 py-6 shadow-[0_2px_0_var(--app-accent)]">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 border-b-2 border-(--app-border) bg-(--app-surface) px-5 py-4 shadow-[0_2px_0_var(--app-accent)]">
         <div>
-          <h1 className="flex items-center gap-2 text-5xl max-lg:text-2xl font-bold italic tracking-tight">
+          <h1 className="flex items-center gap-2 text-4xl max-lg:text-2xl font-bold italic tracking-tight">
             <Image
               src="/favicon.ico"
               alt="PathLens logo"
-              width={50}
-              height={50}
+              width={40}
+              height={40}
               className="max-lg:w-8 max-lg:h-8"
             />
             PathLens
@@ -111,7 +122,7 @@ export function QueryBuilder() {
         {/* LEFT SIDEBAR */}
         <aside
           aria-label="Navigation sidebar"
-          className="w-70 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-10 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
+          className="w-72 shrink-0 h-full flex flex-col overflow-y-auto min-h-0 border-r-2 max-lg:border-r-0 border-(--app-border) bg-(--app-surface-muted) px-4 max-lg:px-3 py-6 max-lg:py-4 max-lg:w-full max-lg:max-h-[50vh] max-lg:h-auto max-lg:border-b-2"
         >
           <Button
             onClick={builder.reset}
@@ -122,6 +133,20 @@ export function QueryBuilder() {
           </Button>
           <nav className="flex flex-col gap-3">
             <Button
+              onClick={() => {
+                setActiveNavItem(null)
+                setCenterTab("builder")
+              }}
+              className={
+                centerTab === "builder"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
+            >
+              <Code2 size={16} />
+              BUILDER
+            </Button>
+            <Button
               onClick={() => handleNavClick("schema")}
               className={
                 activeNavItem === "schema"
@@ -131,6 +156,21 @@ export function QueryBuilder() {
             >
               <Folder size={16} />
               SCHEMA EXPLORER
+            </Button>
+
+            <Button
+              onClick={() => {
+                setActiveNavItem(null)
+                setCenterTab("ledger")
+              }}
+              className={
+                centerTab === "ledger"
+                  ? "flex items-center gap-3 border-2 border-(--app-accent) bg-(--app-accent) px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-on-accent) hover:bg-(--app-accent)"
+                  : "flex items-center gap-3 border-2 border-transparent px-4 py-4 text-left font-(--font-mono) text-xs uppercase tracking-wider text-(--app-text-muted) hover:border-(--app-border-muted)"
+              }
+            >
+              <FileText size={16} />
+              QUERY PREVIEW
             </Button>
 
             <Button
@@ -184,65 +224,6 @@ export function QueryBuilder() {
               </motion.div>
             )}
           </AnimatePresence>
-        </aside>
-
-        {/* CENTER (ONLY SCROLL AREA) */}
-        <section className="flex-1 min-w-0 flex flex-col overflow-y-auto border-r-2 border-(--app-border)">
-          <div className="border-b-2 border-(--app-border) p-6 max-lg:p-3">
-            <h2 className="text-2xl max-lg:text-xl font-bold mb-4">
-              Active Composition
-            </h2>
-
-            <RuleGroup
-              group={builder.tree}
-              fields={builder.schema.fields}
-              issues={builder.validationIssues}
-              isRoot
-              onAddRule={builder.addRule}
-              onAddGroup={builder.addGroup}
-              onRemove={builder.removeNode}
-              onToggle={builder.toggleGroup}
-              onLogicChange={builder.setGroupLogic}
-              onFieldChange={builder.setRuleField}
-              onOperatorChange={builder.setRuleOperator}
-              onValueChange={(ruleId, value) =>
-                builder.updateRule(ruleId, { value })
-              }
-              onReorder={builder.reorderChild}
-            />
-          </div>
-
-          <div className="flex-1 p-6 max-lg:p-3">
-            <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
-              Filtered Ledger
-            </h2>
-
-            {running ? (
-              <LoadingState />
-            ) : (
-              <ResultsPanel
-                data={builder.dataset}
-                tree={builder.sanitizedTree}
-                stampKey={executionStampKey}
-              />
-            )}
-          </div>
-        </section>
-
-        {/* RIGHT SIDEBAR */}
-        <aside
-          aria-label="Query preview sidebar"
-          className="w-90 shrink-0 h-full flex flex-col overflow-y-auto bg-(--app-surface-muted) px-6 max-lg:px-4 py-6 max-lg:py-4 border-l-2 max-lg:border-l-0 border-(--app-border) max-lg:w-full max-lg:h-auto max-lg:border-t-2"
-        >
-          <h2 className="mb-2 text-2xl max-lg:text-xl font-bold">
-            The PathLens Ledger
-          </h2>
-
-          <QueryPreview
-            sqlQuery={builder.sqlQuery}
-            mongoQuery={builder.mongoQuery}
-            jsonQuery={builder.jsonQuery}
-          />
 
           <div className="mt-6 border-t-2 border-(--app-border-muted) pt-5 font-(--font-mono)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em]">
@@ -267,34 +248,96 @@ export function QueryBuilder() {
             </dl>
           </div>
         </aside>
+
+        {/* CENTER */}
+        <section className="flex-1 min-w-0 flex flex-col overflow-hidden border-r-2 max-lg:border-r-0 border-(--app-border)">
+          {centerTab === "builder" ? (
+            <>
+              <div className="flex-1 min-h-0 overflow-y-auto border-b-2 border-(--app-border) p-6 max-lg:p-3">
+                <h2 className="text-2xl max-lg:text-xl font-bold mb-4">
+                  Active Composition
+                  <span className="ml-2 align-middle rounded-md border border-(--app-border) bg-(--app-surface) px-2 py-0.5 text-[10px] font-semibold uppercase text-(--app-text-muted)">
+                    {builder.schema.label}
+                  </span>
+                </h2>
+                <RuleGroup
+                  group={builder.tree}
+                  fields={builder.schema.fields}
+                  issues={builder.validationIssues}
+                  isRoot
+                  onAddRule={builder.addRule}
+                  onAddGroup={builder.addGroup}
+                  onRemove={builder.removeNode}
+                  onToggle={builder.toggleGroup}
+                  onLogicChange={builder.setGroupLogic}
+                  onFieldChange={builder.setRuleField}
+                  onOperatorChange={builder.setRuleOperator}
+                  onValueChange={(ruleId, value) =>
+                    builder.updateRule(ruleId, { value })
+                  }
+                  onReorder={builder.reorderChild}
+                />
+              </div>
+
+              <div className="flex-1 min-h-0 flex flex-col p-5 max-lg:p-3">
+                <h2 className="mb-2 text-2xl max-lg:text-xl font-bold flex-none">
+                  Filtered Ledger
+                </h2>
+                <div className="flex-1 min-h-0">
+                  {running ? (
+                    <LoadingState />
+                  ) : (
+                    <ResultsPanel
+                      data={builder.dataset}
+                      tree={builder.sanitizedTree}
+                      stampKey={executionStampKey}
+                    />
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 min-h-0 overflow-y-auto p-6 max-lg:p-3">
+              <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
+                The PathLens Ledger
+              </h2>
+              <QueryPreview />
+            </div>
+          )}
+        </section>
       </div>
 
-      {/* OVERLAY */}
       <AnimatePresence>
         {schemaOverlayOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 z-40 bg-black/20"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+          <motion.div
+            key="schema-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40"
+          >
+            <div
+              className="absolute inset-0 bg-black/20"
               onClick={closeSchemaOverlay}
             />
+
             <motion.aside
-              initial={{ x: -320 }}
+              initial={{ x: "-100%" }}
               animate={{ x: 0 }}
-              exit={{
-                x: -320,
-                transition: { type: "tween", ease: "easeIn", duration: 0.2 },
+              exit={{ x: "-100%" }}
+              transition={{
+                type: "tween",
+                ease: [0.32, 0, 0.67, 0],
+                duration: 0.22,
               }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               aria-label="Schema explorer overlay"
-              className="fixed left-70 max-md:left-0 top-0 z-40 flex h-full w-95 max-md:w-full flex-col overflow-y-auto border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
+              className="absolute left-70 max-md:left-0 top-0 z-40 flex h-full w-95 max-md:w-full flex-col overflow-y-auto border-r-2 max-md:border-r-0 border-(--app-border) bg-(--app-surface) p-6 shadow-xl"
             >
               <div className="mb-6 flex items-center justify-between">
                 <h3 className="text-xl font-bold">Schema Explorer</h3>
                 <Button
-                  onClick={() => setSchemaOverlayOpen(false)}
+                  onClick={closeSchemaOverlay}
                   className="rounded-md p-2 text-(--app-text-muted) transition hover:bg-(--app-surface-muted)"
                 >
                   <X size={20} />
@@ -308,11 +351,11 @@ export function QueryBuilder() {
                 schema={builder.schema}
                 onAddRule={(fieldKey) => {
                   addRuleWithField(builder.tree.id, fieldKey)
-                  setSchemaOverlayOpen(false)
+                  closeSchemaOverlay()
                 }}
               />
             </motion.aside>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </main>
