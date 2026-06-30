@@ -57,6 +57,7 @@ export const RuleGroup = memo(function RuleGroup({
   const groupIssue = issues.find((issue) => issue.nodeId === group.id)?.message
 
   const groupTint = getGroupTint(group.id)
+  const groupTint = getGroupTint(group.id)
 
   return (
     <section

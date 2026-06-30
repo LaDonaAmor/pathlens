@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import {
