@@ -4,7 +4,15 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 export type ThemeMode = "light" | "dark"
-export type PreviewMode = "sql" | "mongo" | "json"
+export type PreviewMode =
+  | "sql"
+  | "mongo"
+  | "json"
+  | "graphql"
+  | "cypher"
+  | "promql"
+  | "kql"
+  | "spl"
 export type NavItem = "schema" | "presets" | "history"
 export type CenterTab = "builder" | "ledger"
 

@@ -301,11 +301,7 @@ export function QueryBuilder() {
               <h2 className="mb-4 text-2xl max-lg:text-xl font-bold">
                 The PathLens Ledger
               </h2>
-              <QueryPreview
-                sqlQuery={builder.sqlQuery}
-                mongoQuery={builder.mongoQuery}
-                jsonQuery={builder.jsonQuery}
-              />
+              <QueryPreview />
             </div>
           )}
         </section>
