@@ -51,29 +51,34 @@ export function ResultsPanel({
   )
 
   return (
-    <section className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <section className="flex flex-col h-full min-h-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 flex-none">
         <h2 className="text-lg font-semibold">Results</h2>
-
         <ResultsCount total={result.total} executionTimeMs={executionTimeMs} />
       </div>
 
       {stampKey > 0 ? (
         <div
           key={stampKey}
-          className="animate-execution-stamp inline-flex border-2 border-(--app-accent) bg-(--app-surface) px-3 py-2 font-(--font-mono) text-xs uppercase tracking-[0.14em] text-(--app-accent)"
+          className="animate-execution-stamp self-start border-2 border-(--app-accent) mb-2 bg-(--app-surface) px-3 py-2 font-(--font-mono) text-xs uppercase tracking-[0.14em] text-(--app-accent)"
         >
-          Executed · {result.total} rows · {executionTimeMs.toFixed(1)}ms
+          Executed / {result.total} rows / {executionTimeMs.toFixed(1)}ms
         </div>
       ) : null}
 
       {rows.length ? (
-        <ResultsTable rows={rows} sort={sort} onSortChange={setSort} />
+        <div className="flex-1 min-h-0 overflow-auto">
+          <ResultsTable rows={rows} sort={sort} onSortChange={setSort} />
+        </div>
       ) : (
-        <EmptyState />
+        <div className="flex-1 min-h-0">
+          <EmptyState />
+        </div>
       )}
 
-      <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+      <div className="flex-none pt-3">
+        <Pagination page={page} pageCount={pageCount} onPageChange={setPage} />
+      </div>
     </section>
   )
 }

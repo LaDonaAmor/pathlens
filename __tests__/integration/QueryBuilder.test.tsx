@@ -8,7 +8,7 @@ describe("QueryBuilder", () => {
     renderWithProviders(<QueryBuilder />)
 
     expect(screen.getByText("PathLens")).toBeInTheDocument()
-    expect(screen.getByText("The PathLens Ledger")).toBeInTheDocument()
+    expect(screen.getByText("QUERY PREVIEW")).toBeInTheDocument()
     expect(screen.getByText("Results")).toBeInTheDocument()
     expect(screen.getByText("Active Composition")).toBeInTheDocument()
   })

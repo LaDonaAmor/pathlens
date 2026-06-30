@@ -7,6 +7,11 @@ import {
   generateMongoQuery,
   generateSqlQuery,
   generateJsonQuery,
+  generateGraphqlQuery,
+  generateCypherQuery,
+  generatePromqlQuery,
+  generateKqlQuery,
+  generateSplQuery,
 } from "@/lib/queryEngine"
 import { sanitizeQueryTree } from "@/lib/sanitizer"
 import { validateQueryTree } from "@/lib/validator"
@@ -48,6 +53,31 @@ export function useQueryBuilder() {
     [sanitizedTree]
   )
 
+  const graphqlQuery = useMemo(
+    () => generateGraphqlQuery(sanitizedTree, schema.id),
+    [sanitizedTree, schema.id]
+  )
+
+  const cypherQuery = useMemo(
+    () => generateCypherQuery(sanitizedTree, schema.label),
+    [sanitizedTree, schema.label]
+  )
+
+  const promqlQuery = useMemo(
+    () => generatePromqlQuery(sanitizedTree),
+    [sanitizedTree]
+  )
+
+  const kqlQuery = useMemo(
+    () => generateKqlQuery(sanitizedTree),
+    [sanitizedTree]
+  )
+
+  const splQuery = useMemo(
+    () => generateSplQuery(sanitizedTree),
+    [sanitizedTree]
+  )
+
   return {
     ...store,
     schema,
@@ -57,5 +87,10 @@ export function useQueryBuilder() {
     sqlQuery,
     mongoQuery,
     jsonQuery,
+    graphqlQuery,
+    cypherQuery,
+    promqlQuery,
+    kqlQuery,
+    splQuery,
   }
 }
