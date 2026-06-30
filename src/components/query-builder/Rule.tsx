@@ -35,42 +35,49 @@ export const Rule = memo(function Rule({
 
   return (
     <div
-      className={`rounded-md border border-(--app-border-muted) p-4 max-lg:p-3 shadow-sm ${ruleTint}`}
+      className={`rounded-md border border-(--app-border-muted) p-3 max-lg:p-3 shadow-sm md:flex-nowrap ${ruleTint}`}
     >
-      <div className="grid gap-2 md:grid-cols-[24px_minmax(120px,1fr)_minmax(120px,1fr)_minmax(180px,1.4fr)_40px]">
-        <div className="hidden items-center text-(--app-text-muted) md:flex">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="hidden shrink-0 items-center text-(--app-text-muted) md:flex">
           <GripVertical size={16} />
         </div>
 
-        <FieldSelector
-          id={`${rule.id}-field`}
-          fields={fields}
-          value={rule.field}
-          onChange={onFieldChange}
-        />
+        <div className="min-w-20 flex-1">
+          <FieldSelector
+            id={`${rule.id}-field`}
+            fields={fields}
+            value={rule.field}
+            onChange={onFieldChange}
+          />
+        </div>
 
-        <OperatorSelector
-          id={`${rule.id}-operator`}
-          fieldType={field.type}
-          value={rule.operator}
-          onChange={onOperatorChange}
-        />
+        <div className="min-w-20 flex-1">
+          <OperatorSelector
+            id={`${rule.id}-operator`}
+            fieldType={field.type}
+            value={rule.operator}
+            onChange={onOperatorChange}
+          />
+        </div>
 
-        <ValueInput
-          field={field}
-          operator={rule.operator}
-          value={rule.value}
-          onChange={onValueChange}
-        />
+        <div className="min-w-10 flex-[1.4]">
+          <ValueInput
+            field={field}
+            operator={rule.operator}
+            value={rule.value}
+            onChange={onValueChange}
+          />
+        </div>
 
         <Button
           onClick={onRemove}
-          className="h-9 w-9 px-0 text-(--error)"
+          className="h-9 w-9 shrink-0 px-0 text-(--error)"
           aria-label="Remove rule"
         >
           <Trash2 size={16} />
         </Button>
       </div>
+
       {issue ? (
         <div className="mt-3">
           <Badge variant="invalid">{issue}</Badge>
